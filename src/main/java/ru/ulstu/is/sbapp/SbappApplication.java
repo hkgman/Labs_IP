@@ -18,22 +18,26 @@ public class SbappApplication {
 		return String.format("Вы ввели %s!", str);
 	}
 	@GetMapping("/sum")
-	public String sum(@RequestParam(required = false,defaultValue = "0") float firstNum, @RequestParam(required = false,defaultValue = "0") float secondNum)
+	public String sum(@RequestParam(required = false,defaultValue = "0") float firstNum,
+					  @RequestParam(required = false,defaultValue = "0") float secondNum)
 	{
 		return Float.toString(firstNum+secondNum);
 	}
 	@GetMapping("/dif")
-	public String dif(@RequestParam(required = false,defaultValue = "0") float firstNum, @RequestParam(required = false,defaultValue = "0") float secondNum)
+	public String dif(@RequestParam(required = false,defaultValue = "0") float firstNum,
+					  @RequestParam(required = false,defaultValue = "0") float secondNum)
 	{
 		return Float.toString(firstNum-secondNum);
 	}
 	@GetMapping("/com")
-	public String com(@RequestParam(required = false,defaultValue = "0") float firstNum, @RequestParam(required = false,defaultValue = "0") float secondNum)
+	public String com(@RequestParam(required = false,defaultValue = "0") float firstNum,
+					  @RequestParam(required = false,defaultValue = "0") float secondNum)
 	{
 		return Float.toString(firstNum*secondNum);
 	}
 	@GetMapping("/div")
-	public String div(@RequestParam(required = false,defaultValue = "0") float firstNum, @RequestParam(required = false,defaultValue = "0") float secondNum)
+	public String div(@RequestParam(required = false,defaultValue = "0") float firstNum,
+					  @RequestParam(required = false,defaultValue = "0") float secondNum)
 	{
 		if(secondNum==0)
 		{
