@@ -5,6 +5,7 @@ let button_dif=document.getElementById("dif");
 let button_com=document.getElementById("com");
 let button_div=document.getElementById("div");
 let Conclusion=document.getElementById("Conclusion");
+let Select=document.getElementById("SelectId")
 
 button_sum.onclick=function(event){
     executeRequest("sum");
@@ -22,7 +23,9 @@ button_div.onclick=function(event){
 function executeRequest(operationAddress) {
     let numOne = number1_input.value;
     let numTwo = number2_input.value;
-    fetch(`http://localhost:8080/${operationAddress}?firstNum=${numOne}&secondNum=${numTwo}`)
+    let selecttype=Select.value;
+    console.log(`http://localhost:8080/${operationAddress}?firstObj=${numOne}&secondObj=${numTwo}&type=${selecttype}`)
+    fetch(`http://localhost:8080/${operationAddress}?firstObj=${numOne}&secondObj=${numTwo}&type=${selecttype}`)
         .then((response) => {
             return response.text()
           })
