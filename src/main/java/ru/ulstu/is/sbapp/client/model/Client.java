@@ -27,13 +27,13 @@ public class Client {
         this.lastName = lastName;
         this.purchases = new ArrayList<>();
     }
-    public void addPurchase(Purchase purchase)
-    {
-        this.purchases.add(purchase);
-        if(purchase.getClient() != this)
+
+    public void setPurchase(Purchase purchase) {
+        if(purchase==null)
         {
-            purchase.setClient(this);
+            throw new IllegalArgumentException("Да");
         }
+        this.purchases.add(purchase);
     }
 
     public Long getId() {

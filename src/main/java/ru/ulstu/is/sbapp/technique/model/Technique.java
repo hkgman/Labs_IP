@@ -3,6 +3,7 @@ package ru.ulstu.is.sbapp.technique.model;
 import jakarta.persistence.*;
 import ru.ulstu.is.sbapp.purchase.model.Purchase;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -19,7 +20,7 @@ public class Technique {
 
 
 
-    @ManyToMany(mappedBy = "techniques")
+    @ManyToMany(mappedBy = "techniques",fetch = FetchType.EAGER)
     private List<Purchase> purchases;
 
     public Technique(){}
@@ -48,9 +49,18 @@ public class Technique {
     {
         this.TechPrice=TechPrice;
     }
-    public List<Purchase> getPurchases()
+    public List<Purchase> getPurchase()
     {
         return purchases;
+    }
+    public void setPurchase(Purchase purchase) {
+        if (purchases == null){
+            purchases = new ArrayList<>();
+        }
+        this.purchases.add(purchase);
+        if (!purchase.getTechnique().contains(this)) { // warning this may cause performance issues if you have a large data set since this operation is O(n)
+            purchase.getTechnique().add(this);
+        }
     }
     @Override
     public boolean equals(Object o) {
@@ -63,5 +73,14 @@ public class Technique {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    @Override
+    public String toString() {
+        return "Technique{" +
+                "id=" + id +
+                ", Type='" + Type + '\'' +
+                ", TechPrice ='" + TechPrice + '\'' +
+                '}';
     }
 }

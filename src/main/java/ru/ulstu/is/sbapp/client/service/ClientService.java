@@ -32,14 +32,7 @@ public class ClientService {
         em.persist(client);
         return client;
     }
-    @Transactional
-    public Client addPurchase(Long id, Date DateOfPurchase,double price)
-    {
-        final Client curclient = findClient(id);
-        final Purchase purchase=purchaseService.addPurchase(DateOfPurchase,price);
-        curclient.addPurchase(purchase);
-        return em.merge(curclient);
-    }
+
     @Transactional(readOnly = true)
     public Client findClient(Long id) {
         final Client client = em.find(Client.class, id);

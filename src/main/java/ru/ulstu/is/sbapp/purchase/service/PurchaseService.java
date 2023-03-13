@@ -10,6 +10,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.PersistenceContext;
 import ru.ulstu.is.sbapp.purchase.model.Purchase;
+import ru.ulstu.is.sbapp.technique.model.Technique;
 
 import java.util.Date;
 import java.util.List;
@@ -20,7 +21,7 @@ public class PurchaseService {
     private EntityManager em;
 
     @Transactional
-    public Purchase addPurchase(Date DateOfPurchase, double Price) {
+    public Purchase addPurchase(Date DateOfPurchase, double Price, List<Technique> techniques) {
         if (DateOfPurchase==null) {
             throw new IllegalArgumentException("Date of purchase is null or empty");
         }
@@ -28,6 +29,9 @@ public class PurchaseService {
             throw new IllegalArgumentException("Price is null or empty");
         }
         final Purchase purchase = new Purchase(DateOfPurchase, Price);
+        for (int i = 0; i < techniques .size(); i++){
+            purchase.addTechnique(techniques.get(i));
+        }
         em.persist(purchase);
         return purchase;
     }

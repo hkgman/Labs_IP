@@ -24,7 +24,7 @@ public class Purchase {
     @JoinColumn(name ="client_fk")
     private Client client;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "purchases_techniques",
     joinColumns = @JoinColumn(name = "purchase_fk"),
     inverseJoinColumns = @JoinColumn(name = "technique_fk"))
@@ -44,13 +44,13 @@ public class Purchase {
     public List<Technique> getTechnique() {
         return techniques;
     }
-    public void setTechnique(Technique technique) {
+    public void addTechnique(Technique technique) {
         if (techniques == null){
             techniques = new ArrayList<>();
         }
         this.techniques.add(technique);
-        if (!technique.getPurchases().contains(this)) { // warning this may cause performance issues if you have a large data set since this operation is O(n)
-            technique.getPurchases().add(this);
+        if (technique.getPurchase()==null) { // warning this may cause performance issues if you have a large data set since this operation is O(n)
+            technique.setPurchase(this);
         }
     }
     public Long getId()
@@ -79,6 +79,9 @@ public class Purchase {
     }
     public void setClient(Client client)
     {
+        if(this.client != null){
+            this.client.getPurchases().remove(this);
+        }
         this.client=client;
         if (!client.getPurchases().contains(this)) {
             client.getPurchases().add(this);
