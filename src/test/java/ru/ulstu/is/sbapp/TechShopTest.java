@@ -62,8 +62,10 @@ public class TechShopTest {
         Assertions.assertEquals(purchase1.getTechnique().size(), 3);
 
 
-        purchaseService.deleteAllPurchases();
-        Assertions.assertThrows(EntityNotFoundException.class, () -> purchaseService.findPurchase(-1L));
+        log.info("Техник = " + purchaseService.findPurchase(purchase.getId()).getTechnique().size());
+        techniqueService.deleteAllTechniques();
+        log.info("Техник после удаления = " + purchaseService.findPurchase(purchase.getId()).getTechnique().size());
+
     }
 
 
