@@ -50,7 +50,25 @@ public class PurchaseService {
         return em.createQuery("select p from Purchase p", Purchase.class)
                 .getResultList();
     }
+    @Transactional
+    public void addTechnique(Technique technique,Long purchaseId)
+    {
+        final Purchase purchase=findPurchase(purchaseId);
+        purchase.getTechnique().add(technique);
+        technique.getPurchase().add(purchase);
+        em.merge(purchase);
+    }
 
+    @Transactional
+    public void removeTechnique(Technique technique,Long purchaseId)
+    {
+        final Purchase curpurchase=findPurchase(purchaseId);
+        final Technique curtechnique=em.find(Technique.class,technique.getId());
+        curpurchase.getTechnique().remove(curtechnique);
+        curtechnique.getPurchase().remove(curpurchase);
+        em.merge(curpurchase);
+        em.merge(curtechnique);
+}
     @Transactional
     public Purchase updatePurchase(Long id, Date DateOfPurchase, Float Price) {
         if (DateOfPurchase==null) {
