@@ -16,7 +16,7 @@ public class Client {
     private String firstName;
     private String lastName;
 
-    @OneToMany(fetch = FetchType.EAGER,mappedBy = "client",cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER,mappedBy = "client",cascade = CascadeType.REMOVE)
     private List<Purchase> purchases;
 
     public Client() {
@@ -59,6 +59,11 @@ public class Client {
     public  List<Purchase> getPurchases()
     {
         return purchases;
+    }
+
+    public void setPurchases(List<Purchase> purchases)
+    {
+        this.purchases=purchases;
     }
 
     @Override
