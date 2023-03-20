@@ -1,7 +1,7 @@
 package ru.ulstu.is.sbapp.client.model;
 
 import jakarta.persistence.*;
-import ru.ulstu.is.sbapp.purchase.model.Purchase;
+import ru.ulstu.is.sbapp.Favourite.model.Favourite;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,25 +16,21 @@ public class Client {
     private String firstName;
     private String lastName;
 
-    @OneToMany(fetch = FetchType.EAGER,mappedBy = "client",cascade = CascadeType.REMOVE)
-    private List<Purchase> purchases;
+    private String email;
+
+    @OneToOne
+    @JoinColumn(name="favourite_id")
+    private Favourite favourite;
 
     public Client() {
     }
 
-    public Client(String firstName, String lastName) {
+    public Client(String firstName, String lastName,String email) {
         this.firstName = firstName;
         this.lastName = lastName;
-        this.purchases = new ArrayList<>();
+        this.email=email;
     }
 
-    public void setPurchase(Purchase purchase) {
-        if(purchase==null)
-        {
-            throw new IllegalArgumentException("Да");
-        }
-        this.purchases.add(purchase);
-    }
 
     public Long getId() {
         return id;
@@ -56,15 +52,23 @@ public class Client {
         this.lastName = lastName;
     }
 
-    public  List<Purchase> getPurchases()
+    public String getEmail()
     {
-        return purchases;
+        return email;
+    }
+    public void setEmail(String email){
+        this.email=email;
     }
 
-    public void setPurchases(List<Purchase> purchases)
+    public void setFavourite(Favourite favourite)
     {
-        this.purchases=purchases;
+        this.favourite=favourite;
     }
+    public Favourite getFavourite()
+    {
+        return favourite;
+    }
+
 
     @Override
     public boolean equals(Object o) {
@@ -85,6 +89,7 @@ public class Client {
                 "id=" + id +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
+                ", email='" + email + '\'' +
                 '}';
     }
 
