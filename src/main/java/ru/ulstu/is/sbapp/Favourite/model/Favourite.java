@@ -64,7 +64,7 @@ public class Favourite {
 
     @Override
     public String toString() {
-        return "Purchase{" +
+        return "Favourite{" +
                 "id=" + id +
                 ", DateOfAdd='" + DateOfAdd + '\'' +
                 '}';
