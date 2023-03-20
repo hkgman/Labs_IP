@@ -36,7 +36,7 @@ public class TidingService {
 
     @Transactional(readOnly = true)
     public List<Tiding> findAllTidings() {
-        return em.createQuery("select t from Tiding T", Tiding.class)
+        return em.createQuery("select t from Tiding t", Tiding.class)
                 .getResultList();
     }
 
