@@ -82,7 +82,7 @@ public class FavouriteService {
     }
 
     @Transactional
-    public void removeTechniqueInPurchase(Long id, Tiding tiding, int count) {
+    public void removeTechniqueInPurchase(Long id, Tiding tiding) {
         final Favourite favourite = findFavourite(id);
         FavouriteTiding favouriteTiding = em.find(FavouriteTiding.class, new FavouriteTidingId(favourite.getId(), tiding.getId()));
         if (favouriteTiding == null) {

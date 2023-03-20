@@ -60,7 +60,7 @@ public class TidingService {
     }
 
     @Transactional
-    public void deleteAllTechniques() {
+    public void deleteAllTidings() {
         em.createQuery("delete from FavouriteTiding");
         em.createQuery("delete from Tiding").executeUpdate();
     }
