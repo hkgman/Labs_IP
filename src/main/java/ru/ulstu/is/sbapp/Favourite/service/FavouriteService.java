@@ -2,7 +2,6 @@ package ru.ulstu.is.sbapp.Favourite.service;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 import ru.ulstu.is.sbapp.FavouriteTiding.FavouriteTiding;
 import ru.ulstu.is.sbapp.FavouriteTiding.FavouriteTidingId;
 
@@ -10,7 +9,6 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.PersistenceContext;
 import ru.ulstu.is.sbapp.Favourite.model.Favourite;
-import ru.ulstu.is.sbapp.client.model.Client;
 import ru.ulstu.is.sbapp.news.model.Tiding;
 
 import java.util.Date;
@@ -72,7 +70,7 @@ public class FavouriteService {
         em.createQuery("delete from Favourite").executeUpdate();
     }
     @Transactional
-    public void addTechniqueInPurchase(Long id, Tiding tiding) {
+    public void addTidingInFavourite(Long id, Tiding tiding) {
         final Favourite favourite = findFavourite(id);
         FavouriteTiding favouriteTiding = em.find(FavouriteTiding.class, new FavouriteTidingId(favourite.getId(), tiding.getId()));
         if (favouriteTiding == null) {
@@ -82,7 +80,7 @@ public class FavouriteService {
     }
 
     @Transactional
-    public void removeTechniqueInPurchase(Long id, Tiding tiding) {
+    public void removeTidingInFavourite(Long id, Tiding tiding) {
         final Favourite favourite = findFavourite(id);
         FavouriteTiding favouriteTiding = em.find(FavouriteTiding.class, new FavouriteTidingId(favourite.getId(), tiding.getId()));
         if (favouriteTiding == null) {

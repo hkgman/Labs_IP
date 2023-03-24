@@ -83,8 +83,8 @@ public class JpaFavouriteTests {
         Favourite favourite = favouriteService.addFavourite(dateofadd1);
         final Tiding tidingOne = tidingService.addTiding("Tiding 1", "abcd");
         final Tiding tidingTwo = tidingService.addTiding("Tiding 2", "efgh");
-        favouriteService.addTechniqueInPurchase(favourite.getId(), tidingOne);
-        favouriteService.addTechniqueInPurchase(favourite.getId(), tidingTwo);
+        favouriteService.addTidingInFavourite(favourite.getId(), tidingOne);
+        favouriteService.addTidingInFavourite(favourite.getId(), tidingTwo);
         favourite = favouriteService.findFavourite(favourite.getId());
         log.info("testAddTidingInFavourite: " + favourite.getTidings().toString());
         Assertions.assertEquals(favourite.getTidings().size(), 2);
@@ -101,9 +101,9 @@ public class JpaFavouriteTests {
         Favourite favourite = favouriteService.addFavourite(dateofadd1);
         final Tiding tidingOne = tidingService.addTiding("Tiding 1", "abcd");
         final Tiding tidingTwo = tidingService.addTiding("Tiding 2", "efgh");
-        favouriteService.addTechniqueInPurchase(favourite.getId(), tidingOne);
-        favouriteService.addTechniqueInPurchase(favourite.getId(), tidingTwo);
-        favouriteService.removeTechniqueInPurchase(favourite.getId(), tidingOne);
+        favouriteService.addTidingInFavourite(favourite.getId(), tidingOne);
+        favouriteService.addTidingInFavourite(favourite.getId(), tidingTwo);
+        favouriteService.removeTidingInFavourite(favourite.getId(), tidingOne);
         favourite = favouriteService.findFavourite(favourite.getId());
         log.info("testRemoveTidingFromFavourite: " + favourite.getTidings());
         Assertions.assertEquals(favourite.getTidings().size(), 1);
