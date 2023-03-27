@@ -20,10 +20,10 @@ public class User {
 
     private String email;
 
-    @OneToMany(mappedBy ="user",cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @OneToMany(mappedBy ="user",cascade = CascadeType.MERGE,fetch = FetchType.EAGER)
     private List<Post> posts =new ArrayList<>();
 
-    @OneToMany(mappedBy ="user",cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @OneToMany(mappedBy ="user",cascade = CascadeType.MERGE,fetch = FetchType.EAGER)
     private List<Comment> comments =new ArrayList<>();
 
     public User() {
@@ -72,16 +72,6 @@ public class User {
         posts.remove(post);
         post.deleteUser();
     }
-    public void addNewComment(Comment comment)
-    {
-        comments.add(comment);
-        comment.setUser(this);
-    }
-    public void deleteComment(Comment comment)
-    {
-        comments.remove(comment);
-        comment.deleteUser();
-    }
 
 
     public String getEmail()
@@ -91,7 +81,13 @@ public class User {
     public void setEmail(String email){
         this.email=email;
     }
-
+    public void removePost(Post post)
+    {
+        if(posts!=null)
+        {
+            posts.remove(post);
+        }
+    }
 
 
     @Override

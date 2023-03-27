@@ -15,15 +15,12 @@ public class Comment {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column
-    private Date DateOfAdd;
-
     private String Text;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER,cascade = CascadeType.MERGE)
     private Post post;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER,cascade = CascadeType.MERGE)
     private User user;
 
     public Comment()
@@ -31,24 +28,15 @@ public class Comment {
 
     }
 
-    public Comment(Date DateOfAdd,String text)
+    public Comment(String text)
     {
-        this.DateOfAdd=DateOfAdd;
         this.Text=text;
     }
     public Long getId()
     {
         return id;
     }
-    public Date getDateOfAdd()
-    {
-        return  DateOfAdd;
-    }
     public String getText() {return  Text;}
-    public void setDateOfAdd(Date DateOfAdd)
-    {
-        this.DateOfAdd=DateOfAdd;
-    }
     public void setText(String text){this.Text=text;}
     public User getUser()
     {
@@ -58,29 +46,10 @@ public class Comment {
     {
         return post;
     }
-    public void setUser(User user) {
-        this.user = user;
-        if (!user.getComments().contains(this)) {
-            user.addNewComment(this);
-        }
-    }
-    public void deleteUser() {
-        if (user.getComments().contains(this)) {
-            user.deleteComment(this);
-        }
-        this.user = null;
-    }
-    public void setPost(Post post) {
+    public void setPost(Post post, User user){
         this.post = post;
-        if (!post.getComments().contains(this)) {
-            post.addNewComment(this);
-        }
-    }
-    public void deletePost() {
-        if (post.getComments().contains(this)) {
-            post.deleteComment(this);
-        }
-        this.user = null;
+        post.getComments().add(this);
+        this.user = user;
     }
 
     @Override
@@ -101,7 +70,6 @@ public class Comment {
     public String toString() {
         return "Comment{" +
                 "id=" + id +
-                ", DateOfAdd='" + DateOfAdd + '\'' +
                 ", Text='" + Text + '\'' +
                 '}';
     }

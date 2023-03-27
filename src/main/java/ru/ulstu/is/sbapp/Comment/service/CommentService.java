@@ -21,15 +21,11 @@ public class CommentService {
     private EntityManager em;
 
     @Transactional
-    public Comment addComment(Date DateOfAdd, String Text) {
-        if(DateOfAdd==null)
-        {
-            throw new IllegalArgumentException("Date is null or empty");
-        }
+    public Comment addComment(String Text) {
         if (!StringUtils.hasText(Text)) {
             throw new IllegalArgumentException("TEXT is null or empty");
         }
-        final Comment comment = new Comment(DateOfAdd,Text);
+        final Comment comment = new Comment(Text);
         em.persist(comment);
         return comment;
     }
@@ -49,13 +45,8 @@ public class CommentService {
                 .getResultList();
     }
     @Transactional
-    public Comment updateComment(Long id, Date DateOfAdd,String Text) {
-        if(DateOfAdd==null)
-        {
-            throw new IllegalArgumentException("Date is null or empty");
-        }
+    public Comment updateComment(Long id,String Text) {
         final Comment currentComment = findComment(id);
-        currentComment.setDateOfAdd(DateOfAdd);
         currentComment.setText(Text);
         return em.merge(currentComment);
     }
@@ -70,31 +61,7 @@ public class CommentService {
     public void deleteAllComments() {
         em.createQuery("delete from Comment").executeUpdate();
     }
-    @Transactional
-    public void addUser(Long id, User u) {
-        final Comment comment = findComment(id);
-        comment.setUser(u);
-        em.merge(comment);
-    }
 
-    @Transactional
-    public void deleteUser(Long id) {
-        final Comment comment = findComment(id);
-        comment.deleteUser();
-        em.merge(comment);
-    }
-    @Transactional
-    public void addPost(Long id, Post p) {
-        final Comment comment = findComment(id);
-        comment.setPost(p);
-        em.merge(comment);
-    }
 
-    @Transactional
-    public void deletePost(Long id) {
-        final Comment comment = findComment(id);
-        comment.deletePost();
-        em.merge(comment);
-    }
 
 }

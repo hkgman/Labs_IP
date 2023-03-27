@@ -63,39 +63,31 @@ public class UserService {
     @Transactional
     public User deleteUser(Long id) {
         final User currentUser = findUser(id);
+        em.createQuery("Delete from Post Where user.id = "+ id).executeUpdate();
+        em.createQuery("Delete from Comment Where user.id = "+id).executeUpdate();
         em.remove(currentUser);
         return currentUser;
     }
 
     @Transactional
     public void deleteAllUsers() {
+        em.createQuery("Delete from Post").executeUpdate();
+        em.createQuery("Delete from Comment").executeUpdate();
         em.createQuery("delete from User").executeUpdate();
     }
     @Transactional
-    public void addNewPost(Long id, Post post) {
+    public Post addNewPost(Long id, String Heading,String Content) {
         User currentUser= findUser(id);
-        currentUser.addNewPost(post);
-        em.merge(currentUser);
+        Post post=new Post(Heading,Content);
+        post.setUser(currentUser);
+        return em.merge(post);
     }
 
     @Transactional
     public void deletePost(Long id, Post post) {
-        User currentUser = findUser(id);
-        currentUser.deletePost(post);
-        em.merge(currentUser);
-    }
-    @Transactional
-    public void addNewComment(Long id, Comment comment) {
-        User currentUser= findUser(id);
-        currentUser.addNewComment(comment);
-        em.merge(currentUser);
+        em.createQuery("Delete Comment where post.Id = "+ post.getId()).executeUpdate();
+        em.createQuery("Delete from Post").executeUpdate();
     }
 
-    @Transactional
-    public void deleteComment(Long id, Comment comment) {
-        User currentUser = findUser(id);
-        currentUser.deleteComment(comment);
-        em.merge(currentUser);
-    }
 
 }

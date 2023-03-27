@@ -21,10 +21,10 @@ public class Post {
 
 
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER,cascade = CascadeType.MERGE)
     private User user;
 
-    @OneToMany(mappedBy = "post",fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "post",fetch = FetchType.EAGER,cascade = CascadeType.MERGE)
     private List<Comment> comments=new ArrayList<>();
 
     public Post(){}
@@ -55,26 +55,15 @@ public class Post {
     }
     public void setUser(User user) {
         this.user = user;
-        if (!user.getPosts().contains(this)) {
-            user.addNewPost(this);
-        }
+    }
+    public User getUser()
+    {
+        return user;
     }
 
+
     public void deleteUser() {
-        if (user.getPosts().contains(this)) {
-            user.deletePost(this);
-        }
         this.user = null;
-    }
-    public void addNewComment(Comment comment)
-    {
-        comments.add(comment);
-        comment.setPost(this);
-    }
-    public void deleteComment(Comment comment)
-    {
-        comments.remove(comment);
-        comment.deletePost();
     }
     public List<Comment> getComments()
     {

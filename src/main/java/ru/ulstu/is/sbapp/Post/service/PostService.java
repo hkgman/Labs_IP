@@ -17,6 +17,7 @@ public class PostService {
     @PersistenceContext
     private EntityManager em;
 
+
     @Transactional
     public Post addPost(String Heading, String Content) {
         if (!StringUtils.hasText(Heading) || !StringUtils.hasText(Content) ) {
@@ -56,38 +57,35 @@ public class PostService {
     @Transactional
     public Post deletePost(Long id) {
         final Post currentPost = findPost(id);
+        em.createQuery("Delete from Comment where post.id = "+id).executeUpdate();
         em.remove(currentPost);
         return currentPost;
     }
 
     @Transactional
-    public void deleteAllTidings() {
+    public void deleteAllPosts() {
         em.createQuery("delete from Post").executeUpdate();
     }
+
     @Transactional
-    public void addUser(Long id, User u) {
+    public Comment addCommentToPost(Long id, User user, String text){
         final Post post = findPost(id);
-        post.setUser(u);
-        em.merge(post);
+        if(post == null){
+            throw new IllegalArgumentException("Post with id " + id + " not found");
+        }
+        Comment comment=new Comment(text);
+        comment.setPost(post, em.find(User.class, user.getId()));
+        return em.merge(comment);
     }
 
     @Transactional
-    public void deleteUser(Long id) {
+    public void removeCommentFromPost(Long id, Comment comment){
         final Post post = findPost(id);
-        post.deleteUser();
-        em.merge(post);
-    }
-    @Transactional
-    public void addNewComment(Long id, Comment comment) {
-        Post currentPost= findPost(id);
-        currentPost.addNewComment(comment);
-        em.merge(currentPost);
-    }
-
-    @Transactional
-    public void deletePost(Long id, Comment comment) {
-        Post currentPost= findPost(id);
-        currentPost.deleteComment(comment);
-        em.merge(currentPost);
+        if(post == null){
+            throw new IllegalArgumentException("Post with id " + id + " not found");
+        }
+        post.getComments().remove(comment);
+        comment.setPost(null, null);
+        em.remove(comment);
     }
 }

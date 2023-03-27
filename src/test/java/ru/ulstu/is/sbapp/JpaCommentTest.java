@@ -9,17 +9,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import ru.ulstu.is.sbapp.Comment.model.Comment;
 import ru.ulstu.is.sbapp.Comment.service.CommentService;
-import ru.ulstu.is.sbapp.User.model.User;
 import ru.ulstu.is.sbapp.User.service.UserService;
 
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
 @SpringBootTest
-public class JpaTidingTest {
-    private static final Logger log = LoggerFactory.getLogger(JpaTidingTest.class);
+public class JpaCommentTest {
+    private static final Logger log = LoggerFactory.getLogger(JpaCommentTest.class);
     @Autowired
     private CommentService commentService;
     @Autowired
@@ -29,8 +27,7 @@ public class JpaTidingTest {
     void testTidingCreate()
     {
         commentService.deleteAllComments();
-        final Date dateofadd= new Date(1212121212121L);
-        final Comment comment=commentService.addComment(dateofadd,"Net");
+        final Comment comment=commentService.addComment("Net");
         log.info("testCommentCreate: " + comment.toString());
         Assertions.assertNotNull(comment.getId());
         commentService.deleteAllComments();
@@ -39,8 +36,7 @@ public class JpaTidingTest {
     void testTidingRead()
     {
         commentService.deleteAllComments();
-        final Date dateofadd= new Date(1212121212121L);
-        final Comment comment=commentService.addComment(dateofadd,"Net");
+        final Comment comment=commentService.addComment("Net");
         log.info("testCommentRead[0]: " + comment.toString());
         final Comment findComment=commentService.findComment(comment.getId());
         log.info("testCommentRead[1]: " + findComment.toString());
@@ -57,10 +53,8 @@ public class JpaTidingTest {
     void testAllTidingRead()
     {
         commentService.deleteAllComments();
-        final Date dateofadd1= new Date(112121212121L);
-        final Date dateofadd2= new Date(1212121212121L);
-        commentService.addComment(dateofadd1,"Net");
-        commentService.addComment(dateofadd2,"yep");
+        commentService.addComment("Net");
+        commentService.addComment("yep");
         final List<Comment> comments = commentService.findAllComments();
         log.info("testAllCommentRead: " + comments.toString());
         Assertions.assertEquals(comments.size(), 2);
@@ -78,34 +72,13 @@ public class JpaTidingTest {
     void testUpdateTiding()
     {
         commentService.deleteAllComments();
-        final Date dateofadd1= new Date(112121212121L);
-        final Date dateofadd2= new Date(1212121212121L);
-        final Comment comment=commentService.addComment(dateofadd1,"Net");
+        final Comment comment=commentService.addComment("Net");
         log.info("testUpdateComment: " + comment.toString());
-        commentService.updateComment(comment.getId(),dateofadd2,"Ladno");
+        commentService.updateComment(comment.getId(),"Ladno");
         final  Comment comment1=commentService.findComment(comment.getId());
         log.info("testUpdateComment: " + comment1.toString());
-        Assertions.assertEquals(comment1.getDateOfAdd(), dateofadd2);
         Assertions.assertEquals(comment1.getText(), "Ladno");
         commentService.deleteAllComments();
     }
-    @Test
-    void testSetAndDeleteUser()
-    {
-        commentService.deleteAllComments();
-        userService.deleteAllUsers();
-        final User user = userService.addUser("Pasha","Sorokin","sorokin.zxcv@gmail.com");
-        final Date dateofadd1= new Date("12/02/2020");
-        final Comment comment=commentService.addComment(dateofadd1,"Net");
-        commentService.addUser(comment.getId(),user);
-        final User user1=userService.findUser(user.getId());
-        final Comment comment1=commentService.findComment(comment.getId());
-        Assertions.assertEquals(comment1.getUser(), user1);
-        Assertions.assertEquals(user1.getComments().get(0), comment);
-        commentService.deleteUser(user.getId());
-        final User user2=userService.findUser(user.getId());
-        final Comment comment2=commentService.findComment(comment.getId());
-        Assertions.assertEquals(comment2.getUser(), null);
-        Assertions.assertEquals(user2.getComments().size(), 0);
-    }
+
 }
