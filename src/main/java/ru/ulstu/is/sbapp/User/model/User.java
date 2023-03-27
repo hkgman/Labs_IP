@@ -1,14 +1,16 @@
-package ru.ulstu.is.sbapp.client.model;
+package ru.ulstu.is.sbapp.User.model;
 
 import jakarta.persistence.*;
-import ru.ulstu.is.sbapp.Favourite.model.Favourite;
+import ru.ulstu.is.sbapp.Comment.model.Comment;
+import ru.ulstu.is.sbapp.Post.model.Post;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 @Entity
-public class Client {
+@Table(name="tab_user")
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -18,14 +20,16 @@ public class Client {
 
     private String email;
 
-    @OneToOne
-    @JoinColumn(name="favourite_id")
-    private Favourite favourite;
+    @OneToMany(mappedBy ="user",cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    private List<Post> posts =new ArrayList<>();
 
-    public Client() {
+    @OneToMany(mappedBy ="user",cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    private List<Comment> comments =new ArrayList<>();
+
+    public User() {
     }
 
-    public Client(String firstName, String lastName,String email) {
+    public User(String firstName, String lastName, String email) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email=email;
@@ -51,6 +55,34 @@ public class Client {
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
+    public List<Post> getPosts()
+    {
+        return  posts;
+    }
+    public List<Comment> getComments()
+    {
+        return  comments;
+    }
+    public void addNewPost(Post post) {
+        posts.add(post);
+        post.setUser(this);
+    }
+
+    public void deletePost(Post post) {
+        posts.remove(post);
+        post.deleteUser();
+    }
+    public void addNewComment(Comment comment)
+    {
+        comments.add(comment);
+        comment.setUser(this);
+    }
+    public void deleteComment(Comment comment)
+    {
+        comments.remove(comment);
+        comment.deleteUser();
+    }
+
 
     public String getEmail()
     {
@@ -60,22 +92,14 @@ public class Client {
         this.email=email;
     }
 
-    public void setFavourite(Favourite favourite)
-    {
-        this.favourite=favourite;
-    }
-    public Favourite getFavourite()
-    {
-        return favourite;
-    }
 
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Client client = (Client) o;
-        return Objects.equals(id, client.id);
+        User user = (User) o;
+        return Objects.equals(id, user.id);
     }
 
     @Override
@@ -90,6 +114,7 @@ public class Client {
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
+                ", posts=" + posts +'\''+
                 '}';
     }
 

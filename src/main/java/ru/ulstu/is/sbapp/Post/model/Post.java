@@ -1,31 +1,35 @@
-package ru.ulstu.is.sbapp.news.model;
+package ru.ulstu.is.sbapp.Post.model;
 
 import jakarta.persistence.*;
-import ru.ulstu.is.sbapp.FavouriteTiding.FavouriteTiding;
+import ru.ulstu.is.sbapp.Comment.model.Comment;
+import ru.ulstu.is.sbapp.User.model.User;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 @Entity
-public class Tiding {
+public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @Column
-    String Heading;
+    private String Heading;
 
-    String Content;
+    private String Content;
 
 
 
-    @OneToMany(mappedBy = "tiding",fetch = FetchType.EAGER)
-    private List<FavouriteTiding> favourites;
+    @ManyToOne(fetch = FetchType.EAGER)
+    private User user;
 
-    public Tiding(){}
+    @OneToMany(mappedBy = "post",fetch = FetchType.EAGER)
+    private List<Comment> comments=new ArrayList<>();
 
-    public Tiding(String Heading, String Content)
+    public Post(){}
+
+    public Post(String Heading, String Content)
     {
         this.Heading = Heading;
         this.Content = Content;
@@ -49,18 +53,39 @@ public class Tiding {
     {
         this.Content = Content;
     }
-    public List<FavouriteTiding> getFavourites() {
-        if (favourites == null) {
-            favourites = new ArrayList<>();
+    public void setUser(User user) {
+        this.user = user;
+        if (!user.getPosts().contains(this)) {
+            user.addNewPost(this);
         }
-        return favourites;
+    }
+
+    public void deleteUser() {
+        if (user.getPosts().contains(this)) {
+            user.deletePost(this);
+        }
+        this.user = null;
+    }
+    public void addNewComment(Comment comment)
+    {
+        comments.add(comment);
+        comment.setPost(this);
+    }
+    public void deleteComment(Comment comment)
+    {
+        comments.remove(comment);
+        comment.deletePost();
+    }
+    public List<Comment> getComments()
+    {
+        return comments;
     }
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Tiding tiding = (Tiding) o;
-        return Objects.equals(id, tiding.id);
+        Post post = (Post) o;
+        return Objects.equals(id, post.id);
     }
 
     @Override

@@ -1,0 +1,12 @@
+2023-03-27 16:52:44 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Синтаксическая ошибка в выражении SQL "create table [*]user (id bigint not null, email varchar(255), first_name varchar(255), last_name varchar(255), primary key (id))"; ожидалось "identifier"
+Syntax error in SQL statement "create table [*]user (id bigint not null, email varchar(255), first_name varchar(255), last_name varchar(255), primary key (id))"; expected "identifier"; SQL statement:
+create table user (id bigint not null, email varchar(255), first_name varchar(255), last_name varchar(255), primary key (id)) [42001-210]
+2023-03-27 16:52:44 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Синтаксическая ошибка в выражении SQL "alter table if exists comment add constraint FK8kcum44fvpupyw6f5baccx25c foreign key (user_id) references [*]user"; ожидалось "identifier"
+Syntax error in SQL statement "alter table if exists comment add constraint FK8kcum44fvpupyw6f5baccx25c foreign key (user_id) references [*]user"; expected "identifier"; SQL statement:
+alter table if exists comment add constraint FK8kcum44fvpupyw6f5baccx25c foreign key (user_id) references user [42001-210]
+2023-03-27 16:52:44 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Синтаксическая ошибка в выражении SQL "alter table if exists post add constraint FK72mt33dhhs48hf9gcqrq4fxte foreign key (user_id) references [*]user"; ожидалось "identifier"
+Syntax error in SQL statement "alter table if exists post add constraint FK72mt33dhhs48hf9gcqrq4fxte foreign key (user_id) references [*]user"; expected "identifier"; SQL statement:
+alter table if exists post add constraint FK72mt33dhhs48hf9gcqrq4fxte foreign key (user_id) references user [42001-210]

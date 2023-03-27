@@ -7,77 +7,58 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import ru.ulstu.is.sbapp.Favourite.model.Favourite;
-import ru.ulstu.is.sbapp.Favourite.service.FavouriteService;
-import ru.ulstu.is.sbapp.client.model.Client;
-import ru.ulstu.is.sbapp.client.service.ClientService;
-import ru.ulstu.is.sbapp.news.service.TidingService;
+import ru.ulstu.is.sbapp.User.model.User;
+import ru.ulstu.is.sbapp.User.service.UserService;
 
-import java.util.Date;
 import java.util.List;
 
 @SpringBootTest
 public class JpaClientTests {
-    private static final Logger log = LoggerFactory.getLogger(JpaFavouriteTests.class);
+    private static final Logger log = LoggerFactory.getLogger(JpaClientTests.class);
     @Autowired
-    private ClientService clientService;
-    @Autowired
-    private FavouriteService favouriteService;
+    private UserService userService;
 
     @Test
     void testClientCreate() {
-        clientService.deleteAllClients();
-        final Client client = clientService.addClient("Pasha","Sorokin","sorokin.zxcv@gmail.com");
-        log.info("testClientCreate: " + client.toString());
-        Assertions.assertNotNull(client.getId());
+        userService.deleteAllUsers();
+        final User user = userService.addUser("Pasha","Sorokin","sorokin.zxcv@gmail.com");
+        log.info("testUserCreate: " + user.toString());
+        Assertions.assertNotNull(user.getId());
 
-        clientService.deleteAllClients();
+        userService.deleteAllUsers();
     }
     @Test
     void testReadClient()
     {
-        clientService.deleteAllClients();
-        final Client client = clientService.addClient("Pasha","Sorokin","sorokin.zxcv@gmail.com");
-        log.info("testClientRead[0]: " + client.toString());
-        final  Client curclient=clientService.findClient(client.getId());
-        log.info("testClientRead[1]: " + curclient.toString());
-        Assertions.assertEquals(client, curclient);
-        clientService.deleteAllClients();
+        userService.deleteAllUsers();
+        final User user = userService.addUser("Pasha","Sorokin","sorokin.zxcv@gmail.com");
+        log.info("testUserRead[0]: " + user.toString());
+        final  User curuser=userService.findUser(user.getId());
+        log.info("testUserRead[1]: " + curuser.toString());
+        Assertions.assertEquals(user, curuser);
+        userService.deleteAllUsers();
     }
     @Test
     void testClientReadNotFound() {
-        clientService.deleteAllClients();
-        Assertions.assertThrows(EntityNotFoundException.class, () -> clientService.findClient(-1L));
+        userService.deleteAllUsers();
+        Assertions.assertThrows(EntityNotFoundException.class, () -> userService.findUser(-1L));
     }
     @Test
     void testClientReadAll() {
-        clientService.deleteAllClients();
-        clientService.addClient("Pupa","Lupa","sasdfdsf@gmail.com");
-        clientService.addClient("Pasha","Sorokin","sorokin.zxcv@gmail.com");
-        final List<Client> clients = clientService.findAllClients();
-        log.info("testClientReadAll: " + clients.toString());
-        Assertions.assertEquals(clients.size(), 2);
+        userService.deleteAllUsers();
+        userService.addUser("Pupa","Lupa","sasdfdsf@gmail.com");
+        userService.addUser("Pasha","Sorokin","sorokin.zxcv@gmail.com");
+        final List<User> users = userService.findAllUsers();
+        log.info("testUserReadAll: " + users.toString());
+        Assertions.assertEquals(users.size(), 2);
 
-        clientService.deleteAllClients();
+        userService.deleteAllUsers();
     }
     @Test
     void testClientReadAllEmpty() {
-        clientService.deleteAllClients();
-        final List<Client> clients = clientService.findAllClients();
-        log.info("testClientReadAllEmpty: " + clients.toString());
-        Assertions.assertEquals(clients.size(), 0);
-    }
-    @Test
-    void testSetFavourite() {
-        clientService.deleteAllClients();
-        Client client = clientService.addClient("Pasha","Sorokin","sorokin.zxcv@gmail.com");
-        final Date dateofadd2= new Date(121212121121L);
-        final Favourite favourite = favouriteService.addFavourite(dateofadd2);
-        clientService.setFavourite(client.getId(), favourite);
-        client = clientService.findClient(client.getId());
-        Assertions.assertEquals(favourite, client.getFavourite());
-
-        clientService.deleteAllClients();
-        favouriteService.deleteAllFavourites();
+        userService.deleteAllUsers();
+        final List<User> users = userService.findAllUsers();
+        log.info("testUserReadAllEmpty: " + users.toString());
+        Assertions.assertEquals(users.size(), 0);
     }
 }
