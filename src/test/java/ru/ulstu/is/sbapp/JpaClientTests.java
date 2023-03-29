@@ -73,6 +73,7 @@ public class JpaClientTests {
         userService.deleteAllUsers();
         final User user = userService.addUser("Pasha","Sorokin","sorokin.zxcv@gmail.com");
         final Post post =userService.addNewPost(user.getId(),"Text1","Text2");
+        final Post post1=userService.addNewPost(user.getId(),"Привет","Да");
         final List<Post> posts =postService.findAllPosts();
         final User user1 = userService.findUser(user.getId());
         final List<Post> posts1 = user1.getPosts();
@@ -83,8 +84,9 @@ public class JpaClientTests {
         userService.deletePost(user.getId(),post);
         final User us = userService.findUser(user.getId());
         Assertions.assertThrows(EntityNotFoundException.class, () -> postService.findPost(post.getId()));
-
+        final List<Post> postss =postService.findAllPosts();
         log.info(us.getPosts().toString());
+        log.info(postss.toString());
         userService.deleteAllUsers();
         postService.deleteAllPosts();
     }

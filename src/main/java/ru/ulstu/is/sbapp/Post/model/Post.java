@@ -84,7 +84,7 @@ public class Post {
 
     @Override
     public String toString() {
-        return "Technique{" +
+        return "Post{" +
                 "id=" + id +
                 ", Heading='" + Heading + '\'' +
                 ", Content ='" + Content + '\'' +

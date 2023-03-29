@@ -86,7 +86,7 @@ public class UserService {
     @Transactional
     public void deletePost(Long id, Post post) {
         em.createQuery("Delete Comment where post.Id = "+ post.getId()).executeUpdate();
-        em.createQuery("Delete from Post").executeUpdate();
+        em.createQuery("Delete from Post where Id = "+post.getId()).executeUpdate();
     }
 
 
