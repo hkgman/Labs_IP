@@ -3,6 +3,8 @@ package ru.ulstu.is.sbapp.Post.service;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.PersistenceContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -17,7 +19,7 @@ public class PostService {
     @PersistenceContext
     private EntityManager em;
 
-
+    private static final Logger log = LoggerFactory.getLogger(PostService.class);
     @Transactional
     public Post addPost(String Heading, String Content) {
         if (!StringUtils.hasText(Heading) || !StringUtils.hasText(Content) ) {
@@ -81,11 +83,10 @@ public class PostService {
     @Transactional
     public void removeCommentFromPost(Long id, Comment comment){
         final Post post = findPost(id);
-        if(post == null){
-            throw new IllegalArgumentException("Post with id " + id + " not found");
-        }
+        log.info(post.toString());
         post.getComments().remove(comment);
+        em.merge(post);
         comment.setPost(null, null);
-        em.remove(comment);
+        em.createQuery("Delete from Comment where Id = "+comment.getId()).executeUpdate();
     }
 }

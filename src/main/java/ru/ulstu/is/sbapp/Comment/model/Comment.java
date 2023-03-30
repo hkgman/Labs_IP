@@ -47,9 +47,14 @@ public class Comment {
         return post;
     }
     public void setPost(Post post, User user){
-        this.post = post;
-        post.getComments().add(this);
-        this.user = user;
+        if(post!=null)
+        {
+            post.getComments().add(this);
+            this.post = post;
+
+            this.user = user;
+        }
+
     }
 
     @Override

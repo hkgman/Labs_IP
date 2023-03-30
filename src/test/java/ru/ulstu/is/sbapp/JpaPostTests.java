@@ -86,12 +86,48 @@ public class JpaPostTests {
         userService.deleteAllUsers();
         final User user = userService.addUser("Pasha","Sorokin","sorokin.zxcv@gmail.com");
         final Post post =userService.addNewPost(user.getId(),"Text1","Text2");
-        final Comment comment =postService.addCommentToPost(post.getId(),user,"СОООСИИ УЕБОК ЕБАННЫЙ");
+        final User user2=userService.findUser(user.getId());
+        log.info(user2.getPosts().toString());
+        final  Post post2=postService.findPost(post.getId());
+        log.info(post2.toString());
+        final Comment comment =postService.addCommentToPost(post.getId(),user,"Крутой пост");
         final List<Comment> comments = commentService.findAllComments();
         log.info(comments.toString());
         final User user1=userService.findUser(user.getId());
         log.info(user1.getComments().toString());
         final  Post post1=postService.findPost(post.getId());
         log.info(post1.getComments().toString());
+    }
+    @Test
+    void TestDeleteCommentFromPost()
+    {
+        postService.deleteAllPosts();
+        userService.deleteAllUsers();
+        final User user = userService.addUser("Pasha","Sorokin","sorokin.zxcv@gmail.com");
+        final Post post =userService.addNewPost(user.getId(),"Text1","Text2");
+        final User user2=userService.findUser(user.getId());
+        log.info("Посты юзера (добавили)"+user2.getPosts().toString());
+        final  Post post2=postService.findPost(post.getId());
+        log.info("Пост который добавили"+post2.toString());
+        final Comment comment =postService.addCommentToPost(post.getId(),user,"Крутой пост");
+        final List<Comment> comments = commentService.findAllComments();
+        log.info("Добавили коммент"+comments.toString());
+        final User user1=userService.findUser(user.getId());
+        log.info("Комменты юзера"+user1.getComments().toString());
+        final  Post post1=postService.findPost(post.getId());
+        log.info("Комменты к посту"+post1.getComments().toString());
+        Comment comment1 = commentService.findComment(comment.getId());
+        log.info("Удаляем коммент");
+        postService.removeCommentFromPost(post.getId(),comment1);
+        final User user3=userService.findUser(user.getId());
+        log.info(user3.getPosts().toString());
+        log.info("Комменты юзера после удаления"+user3.getComments().toString());
+        final Post post3 = postService.findPost(post.getId());
+        log.info(post3.toString());
+        log.info(post3.getComments().toString());
+        final List<Comment> comment4=commentService.findAllComments();
+        log.info(comment4.toString());
+        postService.deleteAllPosts();
+        userService.deleteAllUsers();
     }
 }
