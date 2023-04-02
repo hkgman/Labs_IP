@@ -66,6 +66,7 @@ public class PostService {
 
     @Transactional
     public void deleteAllPosts() {
+        em.createQuery("delete from Comment").executeUpdate();
         em.createQuery("delete from Post").executeUpdate();
     }
 

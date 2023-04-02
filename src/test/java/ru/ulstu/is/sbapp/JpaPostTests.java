@@ -82,6 +82,7 @@ public class JpaPostTests {
     @Test
     void TestAddComment()
     {
+        log.info("Добавление комментария");
         postService.deleteAllPosts();
         userService.deleteAllUsers();
         final User user = userService.addUser("Pasha","Sorokin","sorokin.zxcv@gmail.com");
@@ -101,6 +102,7 @@ public class JpaPostTests {
     @Test
     void TestDeleteCommentFromPost()
     {
+        log.info("Удаление коммента");
         postService.deleteAllPosts();
         userService.deleteAllUsers();
         final User user = userService.addUser("Pasha","Sorokin","sorokin.zxcv@gmail.com");
@@ -110,6 +112,7 @@ public class JpaPostTests {
         final  Post post2=postService.findPost(post.getId());
         log.info("Пост который добавили"+post2.toString());
         final Comment comment =postService.addCommentToPost(post.getId(),user,"Крутой пост");
+        final Comment commentcur =postService.addCommentToPost(post.getId(),user,"Пост плохой");
         final List<Comment> comments = commentService.findAllComments();
         log.info("Добавили коммент"+comments.toString());
         final User user1=userService.findUser(user.getId());
@@ -127,6 +130,7 @@ public class JpaPostTests {
         log.info(post3.getComments().toString());
         final List<Comment> comment4=commentService.findAllComments();
         log.info(comment4.toString());
+        commentService.deleteAllComments();
         postService.deleteAllPosts();
         userService.deleteAllUsers();
     }
