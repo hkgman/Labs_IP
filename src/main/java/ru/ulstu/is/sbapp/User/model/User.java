@@ -68,12 +68,6 @@ public class User {
         post.setUser(this);
     }
 
-    public void deletePost(Post post) {
-        posts.remove(post);
-        post.deleteUser();
-    }
-
-
     public String getEmail()
     {
         return email;
@@ -81,14 +75,6 @@ public class User {
     public void setEmail(String email){
         this.email=email;
     }
-    public void removePost(Post post)
-    {
-        if(posts!=null)
-        {
-            posts.remove(post);
-        }
-    }
-
 
     @Override
     public boolean equals(Object o) {

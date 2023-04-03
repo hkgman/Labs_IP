@@ -7,11 +7,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import ru.ulstu.is.sbapp.Comment.model.Comment;
 import ru.ulstu.is.sbapp.Post.model.Post;
 import ru.ulstu.is.sbapp.Post.service.PostService;
 import ru.ulstu.is.sbapp.User.model.User;
 import ru.ulstu.is.sbapp.User.service.UserService;
 
+import java.util.Arrays;
 import java.util.List;
 
 @SpringBootTest
@@ -89,5 +91,27 @@ public class JpaClientTests {
         log.info(postss.toString());
         userService.deleteAllUsers();
         postService.deleteAllPosts();
+    }
+    //посты и коментарии содержащие определенный текст
+    @Test
+    void Selected()
+    {
+        postService.deleteAllPosts();
+        userService.deleteAllUsers();
+        final User user = userService.addUser("Pasha","Sorokin","sorokin.zxcv@gmail.com");
+        final User user1 = userService.addUser("Pasha","Sorokin","zxcv@gmail.com");
+        final Post post =userService.addNewPost(user.getId(),"Text1","Да");
+        final Post post1=userService.addNewPost(user.getId(),"Привет","Да");
+        final Post post2 = userService.addNewPost(user1.getId(),"ага","конечно");
+        final Comment comment3 = postService.addCommentToPost(post2.getId(),user,"Привет");
+        final Comment comment = postService.addCommentToPost(post.getId(),user,"нект");
+        final Comment comment1 = postService.addCommentToPost(post1.getId(),user1,"Привет");
+        final User u = userService.findUser(user.getId());
+        final List<Post> userPosts = u.getPosts();
+        log.info("Сюда");
+        log.info(userPosts.toString());
+        List<Object[]> onk=(userService.SelectCommentByText("Привет"));
+        log.info(String.valueOf((userService.SelectCommentByText("Привет").size())));
+
     }
 }

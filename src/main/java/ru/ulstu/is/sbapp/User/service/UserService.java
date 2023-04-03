@@ -1,5 +1,6 @@
 package ru.ulstu.is.sbapp.User.service;
 
+import jakarta.persistence.TypedQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,6 +15,7 @@ import jakarta.persistence.PersistenceContext;
 import ru.ulstu.is.sbapp.Comment.service.CommentService;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class UserService {
@@ -25,10 +27,10 @@ public class UserService {
 
     @Transactional
     public User addUser(String firstName, String lastName, String email) {
-        if (!StringUtils.hasText(firstName) || !StringUtils.hasText(lastName) ||!StringUtils.hasText(email)) {
+        if (!StringUtils.hasText(firstName) || !StringUtils.hasText(lastName) || !StringUtils.hasText(email)) {
             throw new IllegalArgumentException("Client info is null or empty");
         }
-        final User user = new User(firstName, lastName,email);
+        final User user = new User(firstName, lastName, email);
         em.persist(user);
         return user;
     }
@@ -50,7 +52,7 @@ public class UserService {
 
     @Transactional
     public User updateUser(Long id, String firstName, String lastName, String email) {
-        if (!StringUtils.hasText(firstName) || !StringUtils.hasText(lastName) ||!StringUtils.hasText(email)) {
+        if (!StringUtils.hasText(firstName) || !StringUtils.hasText(lastName) || !StringUtils.hasText(email)) {
             throw new IllegalArgumentException("User info is null or empty");
         }
         final User currentUser = findUser(id);
@@ -63,8 +65,8 @@ public class UserService {
     @Transactional
     public User deleteUser(Long id) {
         final User currentUser = findUser(id);
-        em.createQuery("Delete from Post Where user.id = "+ id).executeUpdate();
-        em.createQuery("Delete from Comment Where user.id = "+id).executeUpdate();
+        em.createQuery("Delete from Post Where user.id = " + id).executeUpdate();
+        em.createQuery("Delete from Comment Where user.id = " + id).executeUpdate();
         em.remove(currentUser);
         return currentUser;
     }
@@ -75,19 +77,29 @@ public class UserService {
         em.createQuery("Delete from Comment").executeUpdate();
         em.createQuery("delete from User").executeUpdate();
     }
+
     @Transactional
-    public Post addNewPost(Long id, String Heading,String Content) {
-        User currentUser= findUser(id);
-        Post post=new Post(Heading,Content);
+    public Post addNewPost(Long id, String Heading, String Content) {
+        User currentUser = findUser(id);
+        Post post = new Post(Heading, Content);
         post.setUser(currentUser);
         return em.merge(post);
     }
 
     @Transactional
     public void deletePost(Long id, Post post) {
-        em.createQuery("Delete Comment where post.Id = "+ post.getId()).executeUpdate();
-        em.createQuery("Delete from Post where Id = "+post.getId()).executeUpdate();
+        em.createQuery("Delete Comment where post.Id = " + post.getId()).executeUpdate();
+        em.createQuery("Delete from Post where Id = " + post.getId()).executeUpdate();
     }
+
+    @Transactional
+    public List<Object[]> SelectCommentByText(String Text) {
+        return em.createQuery("SELECT u.email,p.Heading,c.Text FROM User u " +
+                "JOIN u.posts p JOIN p.comments c WHERE c.Text LIKE :texty",Object[].class)
+                .setParameter("texty",Text)
+                .getResultList();
+    }
+
 
 
 }
