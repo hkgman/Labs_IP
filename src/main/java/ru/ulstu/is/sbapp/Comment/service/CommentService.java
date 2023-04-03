@@ -9,10 +9,8 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.PersistenceContext;
 import org.springframework.util.StringUtils;
 import ru.ulstu.is.sbapp.Comment.model.Comment;
-import ru.ulstu.is.sbapp.Post.model.Post;
-import ru.ulstu.is.sbapp.User.model.User;
 
-import java.util.Date;
+
 import java.util.List;
 
 @Service

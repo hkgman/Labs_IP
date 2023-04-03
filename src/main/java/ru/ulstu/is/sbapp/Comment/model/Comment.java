@@ -4,9 +4,6 @@ import jakarta.persistence.*;
 import ru.ulstu.is.sbapp.Post.model.Post;
 import ru.ulstu.is.sbapp.User.model.User;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 import java.util.Objects;
 
 @Entity

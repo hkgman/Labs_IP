@@ -1,11 +1,9 @@
 package ru.ulstu.is.sbapp.User.service;
 
-import jakarta.persistence.TypedQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
-import ru.ulstu.is.sbapp.Comment.model.Comment;
 import ru.ulstu.is.sbapp.Post.model.Post;
 import ru.ulstu.is.sbapp.User.model.User;
 
@@ -15,7 +13,6 @@ import jakarta.persistence.PersistenceContext;
 import ru.ulstu.is.sbapp.Comment.service.CommentService;
 
 import java.util.List;
-import java.util.Objects;
 
 @Service
 public class UserService {
