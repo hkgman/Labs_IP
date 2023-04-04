@@ -2,6 +2,7 @@ package ru.ulstu.is.sbapp.User.controller;
 
 import ru.ulstu.is.sbapp.Comment.model.Comment;
 import ru.ulstu.is.sbapp.Post.model.Post;
+import ru.ulstu.is.sbapp.User.model.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,10 +20,11 @@ public class UserDto {
 
     private List<Comment> comments = new ArrayList<>();
 
-    public UserDto(String firstName, String lastName, String email) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email=email;
+    public UserDto(User user) {
+        this.id=user.getId();
+        this.firstName = user.getFirstName();
+        this.lastName = user.getLastName();
+        this.email= user.getEmail();
     }
     public Long getId() {
         return id;
