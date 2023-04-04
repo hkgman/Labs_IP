@@ -9,8 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import ru.ulstu.is.sbapp.Comment.model.Comment;
 import ru.ulstu.is.sbapp.Post.model.Post;
+import ru.ulstu.is.sbapp.Post.service.PostNotFoundException;
 import ru.ulstu.is.sbapp.Post.service.PostService;
 import ru.ulstu.is.sbapp.User.model.User;
+import ru.ulstu.is.sbapp.User.service.UserNotFoundException;
 import ru.ulstu.is.sbapp.User.service.UserService;
 
 import java.util.Arrays;
@@ -47,7 +49,7 @@ public class JpaClientTests {
     @Test
     void testClientReadNotFound() {
         userService.deleteAllUsers();
-        Assertions.assertThrows(EntityNotFoundException.class, () -> userService.findUser(-1L));
+        Assertions.assertThrows(UserNotFoundException.class, () -> userService.findUser(-1L));
     }
     @Test
     void testClientReadAll() {
@@ -74,8 +76,8 @@ public class JpaClientTests {
         postService.deleteAllPosts();
         userService.deleteAllUsers();
         final User user = userService.addUser("Pasha","Sorokin","sorokin.zxcv@gmail.com");
-        final Post post =userService.addNewPost(user.getId(),"Text1","Text2");
-        final Post post1=userService.addNewPost(user.getId(),"Привет","Да");
+        userService.addNewPost(user.getId(),"Text1","Text2"); //post
+        userService.addNewPost(user.getId(),"Привет","Да"); //post1
         final List<Post> posts =postService.findAllPosts();
         final User user1 = userService.findUser(user.getId());
         final List<Post> posts1 = user1.getPosts();
@@ -83,9 +85,9 @@ public class JpaClientTests {
         Assertions.assertEquals(posts.get(0).getUser(), user);
         Assertions.assertEquals(posts.toString(), posts1.toString());
         log.info("testAddAndDeletePost :: Delete ");
-        userService.deletePost(user.getId(),post);
+        userService.deletePost(user.getId(),posts.get(0).getId());
         final User us = userService.findUser(user.getId());
-        Assertions.assertThrows(EntityNotFoundException.class, () -> postService.findPost(post.getId()));
+        Assertions.assertThrows(PostNotFoundException.class, () -> postService.findPost(posts.get(0).getId()));
         final List<Post> postss =postService.findAllPosts();
         log.info(us.getPosts().toString());
         log.info(postss.toString());
@@ -93,25 +95,5 @@ public class JpaClientTests {
         postService.deleteAllPosts();
     }
     //посты и коментарии содержащие определенный текст
-    /*@Test
-    void Selected()
-    {
-        postService.deleteAllPosts();
-        userService.deleteAllUsers();
-        final User user = userService.addUser("Pasha","Sorokin","sorokin.zxcv@gmail.com");
-        final User user1 = userService.addUser("Pasha","Sorokin","zxcv@gmail.com");
-        final Post post =userService.addNewPost(user.getId(),"Text1","Да");
-        final Post post1=userService.addNewPost(user.getId(),"Привет","Да");
-        final Post post2 = userService.addNewPost(user1.getId(),"ага","конечно");
-        final Comment comment3 = postService.addCommentToPost(post2.getId(),user,"Привет");
-        final Comment comment = postService.addCommentToPost(post.getId(),user,"нект");
-        final Comment comment1 = postService.addCommentToPost(post1.getId(),user1,"Привет");
-        final User u = userService.findUser(user.getId());
-        final List<Post> userPosts = u.getPosts();
-        log.info("Сюда");
-        log.info(userPosts.toString());
-        List<Object[]> onk=(userService.SelectCommentByText("Привет"));
-        log.info(String.valueOf((userService.SelectCommentByText("Привет").size())));
 
-    }*/
 }
