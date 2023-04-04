@@ -47,24 +47,25 @@ public class PostRepositoryImpl implements PostRepositoryExtension{
     @Override
     public void addComment(Long id, Long userId, String text) {
         Optional<Post> optionalPost = postRepository.findById(id);
-        if(optionalPost.get()==null){
-            throw new IllegalArgumentException("Post with id " + id + " not found");
+        if(optionalPost.isPresent()) {
+            Comment comment = new Comment(text);
+            comment.setPost(optionalPost.get(), em.find(User.class, userId));
+            commentRepository.save(comment);
         }
-        Comment comment=new Comment(text);
-        comment.setPost(optionalPost.get(), em.find(User.class, userId));
-        commentRepository.save(comment);
     }
 
     @Override
     public void removeComment(Long id, Long commentId) {
         Optional<Post> optionalPost = postRepository.findById(id);
         Optional<Comment> optionalComment = commentRepository.findById(commentId);
-        optionalPost.get().getComments().remove(optionalComment.get());
-        em.merge(optionalPost.get());
-        optionalComment.get().setPost(null, null);
-        em.createQuery("Delete from Comment where Id = :commentId")
-                .setParameter("commentId",commentId)
-                .executeUpdate();
+        if(optionalPost.isPresent() & optionalComment.isPresent()) {
+            optionalPost.get().getComments().remove(optionalComment.get());
+            em.merge(optionalPost.get());
+            optionalComment.get().setPost(null, null);
+            em.createQuery("Delete from Comment where Id = :commentId")
+                    .setParameter("commentId", commentId)
+                    .executeUpdate();
+        }
     }
 
 }

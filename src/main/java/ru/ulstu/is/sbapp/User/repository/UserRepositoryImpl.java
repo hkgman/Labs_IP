@@ -49,9 +49,13 @@ public class UserRepositoryImpl implements UserRepositoryExtension {
     @Override
     public void addPost(Long id, String Heading, String Content) {
         Optional<User> currentUser = userRepository.findById(id);
-        Post post = new Post(Heading, Content);
-        post.setUser(currentUser.get());
-        em.merge(post);
+        if(currentUser.isPresent())
+        {
+            Post post = new Post(Heading, Content);
+            post.setUser(currentUser.get());
+            em.merge(post);
+        }
+
     }
 
     @Override

@@ -1,6 +1,7 @@
 package ru.ulstu.is.sbapp.Post.controller;
 
 import ru.ulstu.is.sbapp.Comment.model.Comment;
+import ru.ulstu.is.sbapp.Post.model.Post;
 import ru.ulstu.is.sbapp.User.model.User;
 
 import java.util.ArrayList;
@@ -17,11 +18,12 @@ public class PostDto {
 
     private List<Comment> comments = new ArrayList<>();
 
-    public PostDto(String Heading, String Content)
+    public PostDto(Post post)
     {
-        this.Heading = Heading;
-        this.Content = Content;
+        this.Heading = post.getHeading();
+        this.Content = post.getContent();
     }
+
 
     public Long getId()
     {
