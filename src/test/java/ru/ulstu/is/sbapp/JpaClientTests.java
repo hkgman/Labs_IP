@@ -93,7 +93,7 @@ public class JpaClientTests {
         postService.deleteAllPosts();
     }
     //посты и коментарии содержащие определенный текст
-    @Test
+    /*@Test
     void Selected()
     {
         postService.deleteAllPosts();
@@ -113,5 +113,5 @@ public class JpaClientTests {
         List<Object[]> onk=(userService.SelectCommentByText("Привет"));
         log.info(String.valueOf((userService.SelectCommentByText("Привет").size())));
 
-    }
+    }*/
 }

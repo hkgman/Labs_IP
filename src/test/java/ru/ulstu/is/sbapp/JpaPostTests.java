@@ -10,6 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import ru.ulstu.is.sbapp.Comment.model.Comment;
 import ru.ulstu.is.sbapp.Comment.service.CommentService;
 import ru.ulstu.is.sbapp.Post.model.Post;
+import ru.ulstu.is.sbapp.Post.service.PostNotFoundException;
 import ru.ulstu.is.sbapp.Post.service.PostService;
 import ru.ulstu.is.sbapp.User.model.User;
 import ru.ulstu.is.sbapp.User.service.UserService;
@@ -44,7 +45,7 @@ public class JpaPostTests {
     @Test
     void TestPostReadNotFound(){
         postService.deleteAllPosts();
-        Assertions.assertThrows(EntityNotFoundException.class, () -> postService.findPost(-1L));
+        Assertions.assertThrows(PostNotFoundException.class, () -> postService.findPost(-1L));
     }
 
     @Test
@@ -70,13 +71,26 @@ public class JpaPostTests {
         Assertions.assertEquals(post.getHeading(), "Test2");
         Assertions.assertEquals(post.getContent(), "Test2");
     }
+    @Test
+    void TestDeleteAllPosts()
+    {
+        log.info("Удаление всех постов");
+        Post post = postService.addPost("Test1", "Test1");
+        Post post2 = postService.addPost("Test1", "Test1");
+        List<Post> posts1 = postService.findAllPosts();
+        log.info(posts1.toString());
+        postService.deleteAllPosts();
+        List<Post> posts = postService.findAllPosts();
+        log.info(posts.toString());
+
+    }
 
     @Test
     void TestDeletePost(){
         postService.deleteAllPosts();
         final Post post = postService.addPost("Test","Test");
         postService.deletePost(post.getId());
-        Assertions.assertThrows(EntityNotFoundException.class, () -> postService.findPost(1L));
+        Assertions.assertThrows(PostNotFoundException.class, () -> postService.findPost(1L));
     }
 
     @Test
@@ -91,7 +105,7 @@ public class JpaPostTests {
         log.info(user2.getPosts().toString());
         final  Post post2=postService.findPost(post.getId());
         log.info(post2.toString());
-        final Comment comment =postService.addCommentToPost(post.getId(),user,"Крутой пост");
+        postService.addCommentToPost(post.getId(),user.getId(),"Крутой пост");
         final List<Comment> comments = commentService.findAllComments();
         log.info(comments.toString());
         final User user1=userService.findUser(user.getId());
@@ -111,17 +125,17 @@ public class JpaPostTests {
         log.info("Посты юзера (добавили)"+user2.getPosts().toString());
         final  Post post2=postService.findPost(post.getId());
         log.info("Пост который добавили"+post2.toString());
-        final Comment comment =postService.addCommentToPost(post.getId(),user,"Крутой пост");
-        final Comment commentcur =postService.addCommentToPost(post.getId(),user,"Пост плохой");
+        postService.addCommentToPost(post.getId(),user.getId(),"Крутой пост");
+        postService.addCommentToPost(post.getId(),user.getId(),"Пост плохой");
         final List<Comment> comments = commentService.findAllComments();
         log.info("Добавили коммент"+comments.toString());
         final User user1=userService.findUser(user.getId());
         log.info("Комменты юзера"+user1.getComments().toString());
         final  Post post1=postService.findPost(post.getId());
         log.info("Комменты к посту"+post1.getComments().toString());
-        Comment comment1 = commentService.findComment(comment.getId());
+        Comment comment1 = commentService.findComment(comments.get(0).getId());
         log.info("Удаляем коммент");
-        postService.removeCommentFromPost(post.getId(),comment1);
+        postService.removeCommentFromPost(post.getId(),comment1.getId());
         final User user3=userService.findUser(user.getId());
         log.info(user3.getPosts().toString());
         log.info("Комменты юзера после удаления"+user3.getComments().toString());
