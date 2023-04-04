@@ -4,60 +4,58 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityNotFoundException;
-import jakarta.persistence.PersistenceContext;
-import org.springframework.util.StringUtils;
 import ru.ulstu.is.sbapp.Comment.model.Comment;
+import ru.ulstu.is.sbapp.Comment.repository.CommentRepository;
+import ru.ulstu.is.sbapp.Util.validation.ValidatorUtil;
 
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CommentService {
-    @PersistenceContext
-    private EntityManager em;
+    private final CommentRepository commentRepository;
+    private final ValidatorUtil validatorUtil;
 
+    public CommentService(CommentRepository commentRepository, ValidatorUtil validatorUtil)
+    {
+        this.commentRepository=commentRepository;
+        this.validatorUtil=validatorUtil;
+    }
     @Transactional
     public Comment addComment(String Text) {
-        if (!StringUtils.hasText(Text)) {
-            throw new IllegalArgumentException("TEXT is null or empty");
-        }
         final Comment comment = new Comment(Text);
-        em.persist(comment);
-        return comment;
+        validatorUtil.validate(comment);
+        return commentRepository.save(comment);
     }
 
     @Transactional(readOnly = true)
     public Comment findComment(Long id) {
-        final Comment comment = em.find(Comment.class, id);
-        if (comment == null) {
-            throw new EntityNotFoundException(String.format("Comment with id [%s] is not found", id));
-        }
-        return comment;
+        final Optional<Comment> client = commentRepository.findById(id);
+        return client.orElseThrow(() -> new CommentNotFoundException(id));
     }
 
     @Transactional(readOnly = true)
     public List<Comment> findAllComments() {
-        return em.createQuery("select c from Comment c", Comment.class)
-                .getResultList();
+        return commentRepository.findAll();
     }
     @Transactional
     public Comment updateComment(Long id,String Text) {
         final Comment currentComment = findComment(id);
         currentComment.setText(Text);
-        return em.merge(currentComment);
+        validatorUtil.validate(currentComment);
+        return commentRepository.save(currentComment);
     }
     @Transactional
     public Comment deleteComment(Long id) {
         final Comment currentComment = findComment(id);
-        em.remove(currentComment);
+        commentRepository.delete(currentComment);
         return currentComment;
     }
 
     @Transactional
     public void deleteAllComments() {
-        em.createQuery("delete from Comment").executeUpdate();
+        commentRepository.deleteAll();
     }
 
 
