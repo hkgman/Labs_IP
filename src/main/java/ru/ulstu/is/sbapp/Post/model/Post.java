@@ -26,7 +26,7 @@ public class Post {
     @ManyToOne(fetch = FetchType.EAGER,cascade = CascadeType.MERGE)
     private User user;
 
-    @OneToMany(mappedBy = "post",fetch = FetchType.EAGER,cascade = CascadeType.MERGE)
+    @OneToMany(mappedBy = "post",fetch = FetchType.EAGER,cascade = CascadeType.ALL,orphanRemoval = true)
     private List<Comment> comments=new ArrayList<>();
 
     public Post(){}

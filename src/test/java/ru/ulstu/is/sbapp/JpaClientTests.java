@@ -69,13 +69,24 @@ public class JpaClientTests {
         log.info("testUserReadAllEmpty: " + users.toString());
         Assertions.assertEquals(users.size(), 0);
     }
-
+    @Test
+    void testDeletePostwithcomments()
+    {
+        final User user = userService.addUser("Pasha","Sorokin","sorokin.zxcv@gmail.com");
+        final User user12 = userService.addUser("Anton","Sorokin","zxcv@gmail.com");
+        userService.addNewPost(user.getId(),"text","tezt");
+        final List<Post> post = postService.findAllPosts();
+        final Post post1 = post.get(0);
+        postService.addCommentToPost(post1.getId(),user12.getId(),"Da");
+        userService.deleteUser(user.getId());
+    }
     @Test
     void testAddAndDeletePost()
     {
         postService.deleteAllPosts();
         userService.deleteAllUsers();
         final User user = userService.addUser("Pasha","Sorokin","sorokin.zxcv@gmail.com");
+        final User user12 = userService.addUser("Anton","Sorokin","zxcv@gmail.com");
         userService.addNewPost(user.getId(),"Text1","Text2"); //post
         userService.addNewPost(user.getId(),"Привет","Да"); //post1
         final List<Post> posts =postService.findAllPosts();

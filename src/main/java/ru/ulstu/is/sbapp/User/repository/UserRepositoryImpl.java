@@ -4,11 +4,13 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
+import ru.ulstu.is.sbapp.Comment.model.Comment;
 import ru.ulstu.is.sbapp.Comment.repository.CommentRepository;
 import ru.ulstu.is.sbapp.Post.model.Post;
 import ru.ulstu.is.sbapp.Post.repository.PostRepository;
 import ru.ulstu.is.sbapp.User.model.User;
 
+import java.util.List;
 import java.util.Optional;
 
 public class UserRepositoryImpl implements UserRepositoryExtension {
@@ -31,6 +33,15 @@ public class UserRepositoryImpl implements UserRepositoryExtension {
             em.createQuery("Delete from Comment Where user.id = :id")
                     .setParameter("id",id)
                     .executeUpdate();
+            List<Post> posts = em.createQuery("Select p from Post p where user.id = :id",Post.class)
+                    .setParameter("id",id)
+                    .getResultList();
+            for(var post : posts)
+            {
+                em.createQuery("Delete from Comment where post.id = :postId")
+                        .setParameter("postId",post.getId())
+                        .executeUpdate();
+            }
             em.createQuery("Delete from Post Where user.id = :id")
                     .setParameter("id",id)
                     .executeUpdate();
