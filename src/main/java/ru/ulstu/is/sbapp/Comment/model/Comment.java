@@ -1,6 +1,7 @@
 package ru.ulstu.is.sbapp.Comment.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import ru.ulstu.is.sbapp.Post.model.Post;
 import ru.ulstu.is.sbapp.User.model.User;
 
@@ -11,7 +12,7 @@ public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-
+    @NotBlank(message = "Text cannot be null")
     private String Text;
 
     @ManyToOne(fetch = FetchType.EAGER,cascade = CascadeType.MERGE)

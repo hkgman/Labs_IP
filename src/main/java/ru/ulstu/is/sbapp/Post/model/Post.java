@@ -1,6 +1,7 @@
 package ru.ulstu.is.sbapp.Post.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import ru.ulstu.is.sbapp.Comment.model.Comment;
 import ru.ulstu.is.sbapp.User.model.User;
 
@@ -15,8 +16,9 @@ public class Post {
     private Long id;
 
     @Column
+    @NotBlank(message = "Heading cannot be null")
     private String Heading;
-
+    @NotBlank(message = "Content cannot be null")
     private String Content;
 
 
