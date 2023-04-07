@@ -1,5 +1,6 @@
 package ru.ulstu.is.sbapp.Post.controller;
 
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 import ru.ulstu.is.sbapp.Post.service.PostService;
 import ru.ulstu.is.sbapp.User.controller.UserDto;
@@ -25,9 +26,8 @@ public class PostController {
                 .toList();
     }
     @PostMapping
-    public PostDto createPost(@RequestParam("Heading") String Heading,
-                              @RequestParam("Content") String Content){
-        return new PostDto(postService.addPost(Heading, Content));
+    public PostDto createPost(@RequestBody @Valid PostDto postDto){
+        return new PostDto(postService.addPost(postDto));
     }
 
     @PutMapping("/{id}")

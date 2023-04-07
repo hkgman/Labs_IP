@@ -20,6 +20,7 @@ public class UserDto {
 
     private List<Comment> comments = new ArrayList<>();
 
+    public UserDto(){}
     public UserDto(User user) {
         this.id=user.getId();
         this.firstName = user.getFirstName();

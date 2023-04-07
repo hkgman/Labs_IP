@@ -33,11 +33,6 @@ public class Post {
     private List<Comment> comments=new ArrayList<>();
 
     public Post(){}
-    public Post(String Heading, String Content)
-    {
-        this.Heading = Heading;
-        this.Content = Content;
-    }
     public Post(String Heading, String Content,byte[] image)
     {
         this.Heading = Heading;

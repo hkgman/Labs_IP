@@ -9,6 +9,7 @@ public class CommentDto {
     private String Text;
     private Post post;
     private User user;
+    public CommentDto(){}
     public CommentDto(Comment comment)
     {
         this.Text=comment.getText();

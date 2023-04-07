@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import ru.ulstu.is.sbapp.Comment.model.Comment;
 import ru.ulstu.is.sbapp.Comment.repository.CommentRepository;
+import ru.ulstu.is.sbapp.Post.controller.PostDto;
 import ru.ulstu.is.sbapp.Post.model.Post;
 import ru.ulstu.is.sbapp.Post.repository.PostRepository;
 import ru.ulstu.is.sbapp.User.model.User;
@@ -27,8 +28,8 @@ public class PostService {
         this.validatorUtil=validatorUtil;
     }
     @Transactional
-    public Post addPost(String Heading, String Content) {
-        final Post post = new Post(Heading,Content);
+    public Post addPost(PostDto postDto) {
+        final Post post = new Post(postDto);
         validatorUtil.validate(post);
         return postRepository.save(post);
     }

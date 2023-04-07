@@ -21,6 +21,7 @@ public class PostDto {
 
     private List<Comment> comments = new ArrayList<>();
 
+    public PostDto(){}
     public PostDto(Post post)
     {
         this.Heading = post.getHeading();
