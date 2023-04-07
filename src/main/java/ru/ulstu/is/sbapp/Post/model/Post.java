@@ -18,10 +18,12 @@ public class Post {
     @Column
     @NotBlank(message = "Heading cannot be null")
     private String Heading;
+
     @NotBlank(message = "Content cannot be null")
     private String Content;
 
-
+    @Lob
+    private byte[] image;
 
     @ManyToOne(fetch = FetchType.EAGER,cascade = CascadeType.MERGE)
     private User user;
@@ -35,6 +37,13 @@ public class Post {
     {
         this.Heading = Heading;
         this.Content = Content;
+    }
+
+    public Post(String Heading, String Content,byte[] image)
+    {
+        this.Heading = Heading;
+        this.Content = Content;
+        this.image=image;
     }
     public Long getId()
     {
@@ -62,7 +71,13 @@ public class Post {
     {
         return user;
     }
+    public byte[] getImage() {
+        return image;
+    }
 
+    public void setImage(byte[] image) {
+        this.image = image;
+    }
 
     public void deleteUser() {
         this.user = null;
