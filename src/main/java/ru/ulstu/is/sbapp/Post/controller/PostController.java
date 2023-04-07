@@ -54,4 +54,10 @@ public class PostController {
     public PostDto deletePost(@PathVariable Long id) {
         return new PostDto(postService.deletePost(id));
     }
+
+    @DeleteMapping
+    public void deleteall()
+    {
+        postService.deleteAllPosts();
+    }
 }

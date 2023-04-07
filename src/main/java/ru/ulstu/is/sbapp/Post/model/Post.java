@@ -17,11 +17,11 @@ public class Post {
     private Long id;
 
     @Column
-    @NotBlank(message = "Heading cannot be null")
-    private String Heading;
+    @NotBlank(message = "heading cannot be null")
+    private String heading;
 
-    @NotBlank(message = "Content cannot be null")
-    private String Content;
+    @NotBlank(message = "content cannot be null")
+    private String content;
 
     @Lob
     private byte[] image;
@@ -35,13 +35,13 @@ public class Post {
     public Post(){}
     public Post(String Heading, String Content,byte[] image)
     {
-        this.Heading = Heading;
-        this.Content = Content;
+        this.heading = Heading;
+        this.content = Content;
         this.image=image;
     }
     public Post(PostDto postDto) {
-        this.Heading = postDto.getHeading();
-        this.Content = postDto.getContent();
+        this.heading = postDto.getHeading();
+        this.content = postDto.getContent();
         this.image = postDto.getImage().getBytes();
     }
     public Long getId()
@@ -50,18 +50,18 @@ public class Post {
     }
     public String getHeading()
     {
-        return Heading;
+        return heading;
     }
     public String getContent()
     {
-        return Content;
+        return content;
     }
     public void setHeading(String Heading){
-        this.Heading =Heading;
+        this.heading =Heading;
     }
     public void setContent(String Content)
     {
-        this.Content = Content;
+        this.content = Content;
     }
     public void setUser(User user) {
         this.user = user;
@@ -102,8 +102,8 @@ public class Post {
     public String toString() {
         return "Post{" +
                 "id=" + id +
-                ", Heading='" + Heading + '\'' +
-                ", Content ='" + Content + '\'' +
+                ", heading='" + heading + '\'' +
+                ", content ='" + content + '\'' +
                 '}';
     }
 }

@@ -11,9 +11,9 @@ import java.util.List;
 public class PostDto {
     private Long id;
 
-    private String Heading;
+    private String heading;
 
-    private String Content;
+    private String content;
 
     private User user;
 
@@ -24,8 +24,8 @@ public class PostDto {
     public PostDto(){}
     public PostDto(Post post)
     {
-        this.Heading = post.getHeading();
-        this.Content = post.getContent();
+        this.heading = post.getHeading();
+        this.content = post.getContent();
         this.image = new String(post.getImage(), StandardCharsets.UTF_8);
     }
 
@@ -36,11 +36,11 @@ public class PostDto {
     }
     public String getHeading()
     {
-        return Heading;
+        return heading;
     }
     public String getContent()
     {
-        return Content;
+        return content;
     }
     public User getUser()
     {
