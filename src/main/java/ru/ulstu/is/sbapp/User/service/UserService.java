@@ -2,6 +2,7 @@ package ru.ulstu.is.sbapp.User.service;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.ulstu.is.sbapp.Post.controller.PostDto;
 import ru.ulstu.is.sbapp.Post.model.Post;
 import ru.ulstu.is.sbapp.Post.service.PostNotFoundException;
 import ru.ulstu.is.sbapp.User.model.User;
@@ -63,10 +64,19 @@ public class UserService {
     }
 
     @Transactional
-    public void addNewPost(Long id, String Heading, String Content) {
-        userRepository.addPost(id,Heading,Content);
+    public void addNewPost(Long id, String Heading, String Content,byte[] img) {
+        userRepository.addPost(id,Heading,Content,img);
     }
-
+    @Transactional
+    public void addNewPost(Long id, PostDto post)
+    {
+        userRepository.addPost(id,post);
+    }
+    @Transactional
+    public List<Post> GetUserPosts(Long id)
+    {
+        return userRepository.getUsersPosts(id);
+    }
     @Transactional
     public void deletePost(Long id, Long postId) {
         userRepository.removePost(id,postId);

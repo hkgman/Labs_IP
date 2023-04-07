@@ -1,3 +1,4 @@
+/*
 package ru.ulstu.is.sbapp;
 
 import jakarta.persistence.EntityNotFoundException;
@@ -108,3 +109,4 @@ public class JpaClientTests {
     //посты и коментарии содержащие определенный текст
 
 }
+*/

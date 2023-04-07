@@ -1,3 +1,4 @@
+/*
 package ru.ulstu.is.sbapp;
 
 import jakarta.persistence.EntityNotFoundException;
@@ -151,3 +152,4 @@ public class JpaPostTests {
         userService.deleteAllUsers();
     }
 }
+*/

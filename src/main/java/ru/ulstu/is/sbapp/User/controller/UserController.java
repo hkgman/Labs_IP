@@ -1,6 +1,9 @@
 package ru.ulstu.is.sbapp.User.controller;
 
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
+import ru.ulstu.is.sbapp.Post.controller.PostDto;
+import ru.ulstu.is.sbapp.Post.model.Post;
 import ru.ulstu.is.sbapp.User.service.UserService;
 
 import java.util.List;
@@ -22,6 +25,12 @@ public class UserController {
                 .map(UserDto::new)
                 .toList();
     }
+    @GetMapping("/{id}/posts")
+    public List<PostDto> getPosts(@PathVariable Long id) {
+        return userService.GetUserPosts(id).stream()
+                .map(PostDto::new)
+                .toList();
+    }
     @PostMapping
     public UserDto createUser(@RequestParam("firstName") String firstName,
                                   @RequestParam("lastName") String lastname,
@@ -38,9 +47,8 @@ public class UserController {
     }
     @PostMapping("/{id}/Post")
     public void addPost(@PathVariable Long id,
-                              @RequestParam("Heading") String Heading,
-                              @RequestParam("Content") String Content) {
-        userService.addNewPost(id, Heading,Content);
+                        @RequestBody @Valid PostDto postDto) {
+        userService.addNewPost(id, postDto);
     }
     @DeleteMapping("/{id}/Post/{postId}")
     public void removePost(@PathVariable Long id,

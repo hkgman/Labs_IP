@@ -2,10 +2,12 @@ package ru.ulstu.is.sbapp.User.repository;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.TypedQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import ru.ulstu.is.sbapp.Comment.model.Comment;
 import ru.ulstu.is.sbapp.Comment.repository.CommentRepository;
+import ru.ulstu.is.sbapp.Post.controller.PostDto;
 import ru.ulstu.is.sbapp.Post.model.Post;
 import ru.ulstu.is.sbapp.Post.repository.PostRepository;
 import ru.ulstu.is.sbapp.User.model.User;
@@ -58,15 +60,26 @@ public class UserRepositoryImpl implements UserRepositoryExtension {
     }
 
     @Override
-    public void addPost(Long id, String Heading, String Content) {
+    public void addPost(Long id, String Heading, String Content,byte[] image) {
         Optional<User> currentUser = userRepository.findById(id);
         if(currentUser.isPresent())
         {
-            Post post = new Post(Heading, Content);
+            Post post = new Post(Heading, Content,image);
             post.setUser(currentUser.get());
             em.merge(post);
         }
 
+    }
+
+    @Override
+    public void addPost(Long id, PostDto postdto) {
+        Optional<User> currentUser = userRepository.findById(id);
+        if(currentUser.isPresent())
+        {
+            Post post = new Post(postdto);
+            post.setUser(currentUser.get());
+            em.merge(post);
+        }
     }
 
     @Override
@@ -77,5 +90,13 @@ public class UserRepositoryImpl implements UserRepositoryExtension {
         em.createQuery("Delete from Post where Id = :postId")
                 .setParameter("postId",postId)
                 .executeUpdate();
+    }
+
+    @Override
+    public List<Post> getUsersPosts(Long id) {
+        TypedQuery<Post> query =
+                em.createQuery("Select p from Post p where user.id = :id",Post.class)
+                        .setParameter("id",id);
+        return query.getResultList();
     }
 }

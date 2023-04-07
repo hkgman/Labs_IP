@@ -3,6 +3,7 @@ package ru.ulstu.is.sbapp.Post.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import ru.ulstu.is.sbapp.Comment.model.Comment;
+import ru.ulstu.is.sbapp.Post.controller.PostDto;
 import ru.ulstu.is.sbapp.User.model.User;
 
 import java.util.ArrayList;
@@ -32,18 +33,21 @@ public class Post {
     private List<Comment> comments=new ArrayList<>();
 
     public Post(){}
-
     public Post(String Heading, String Content)
     {
         this.Heading = Heading;
         this.Content = Content;
     }
-
     public Post(String Heading, String Content,byte[] image)
     {
         this.Heading = Heading;
         this.Content = Content;
         this.image=image;
+    }
+    public Post(PostDto postDto) {
+        this.Heading = postDto.getHeading();
+        this.Content = postDto.getContent();
+        this.image = postDto.getImage().getBytes();
     }
     public Long getId()
     {
