@@ -1,0 +1,146 @@
+html
+{
+    min-height: 100vh;
+}
+header .img-fluid
+{
+    width:232px; 
+    height:100px;
+}
+
+article .img-fluid
+{
+    height:250px;
+}
+article .img-fluid1
+{
+    height:100%;
+    width: 96%;
+}
+.owl
+{
+    width:300px;
+}
+.pdf-size
+{
+    width:70px; 
+}
+body
+{
+    min-height: 100vh;
+}
+.body_app
+{
+    display: grid;
+    grid-template-rows:auto 1fr auto;
+    min-height: 100vh;
+}
+.lp
+{
+    padding-left: 30px;
+}
+.img-school
+{
+    margin-right: 1em;
+    float: start;
+
+}
+.Vnov
+{
+    margin-right: 1em;
+}
+.Vnov1
+{
+    margin-right: 1em;
+}
+.Cont
+{
+
+}
+
+@media only screen and (max-width: 800px) {
+    .owl {
+     display:none;
+ }
+}
+@media only screen and (max-width: 1164px) {
+    .img-school
+    {
+        margin-right: 170px;
+    }
+}
+@media only screen and (max-width: 554px) {
+    .img-school
+    {
+        height: 20% !important;
+        width: 75%;
+    }
+}
+@media only screen and (max-width: 727px) {
+    .headers-problem
+    {
+        
+        flex-direction: column;
+    }
+    .navbar
+    {
+        align-items: flex-start !important;
+    }
+    
+}
+@media only screen and (max-width: 959px) {
+    .navbar
+    {
+        float:left !important;
+    }
+}
+@media only screen and (max-width: 463px) {
+    .Vnov
+    {
+        margin-right: 140px;
+    }
+}
+@media only screen and (max-width: 575px) {
+    .Vnov1
+    {
+        margin-right: 200px;
+    }
+}
+@media only screen and (max-width: 585px) {
+    .Cont
+    {
+        margin-right: 200px;
+    }
+}
+
+
+#banner {
+    margin: 15px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    }
+    
+    #banner img {
+    border-radius: 5px;
+    }
+    
+    #banner img.show {
+    height: 40%;
+    width: 60%;
+    opacity: 1;
+    transition: opacity 1s, visibility 0s;
+    }
+    
+    #banner img.hide {
+    height: 0;
+    width: 0;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 1s, visibility 0s 1s;
+    }
+
+.Pole_height
+{
+    height: 80px;
+}
