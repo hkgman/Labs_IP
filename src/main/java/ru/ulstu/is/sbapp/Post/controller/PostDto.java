@@ -15,15 +15,14 @@ public class PostDto {
 
     private String content;
 
-    private User user;
 
     private String image;
 
-    private List<Comment> comments = new ArrayList<>();
 
     public PostDto(){}
     public PostDto(Post post)
     {
+        this.id= post.getId();
         this.heading = post.getHeading();
         this.content = post.getContent();
         this.image = new String(post.getImage(), StandardCharsets.UTF_8);
@@ -42,15 +41,7 @@ public class PostDto {
     {
         return content;
     }
-    public User getUser()
-    {
-        return user;
-    }
     public String getImage() {
         return image;
-    }
-    public List<Comment> getComments()
-    {
-        return comments;
     }
 }

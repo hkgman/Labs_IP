@@ -7,12 +7,13 @@ import ru.ulstu.is.sbapp.User.model.User;
 public class CommentDto {
     private Long id;
     private String Text;
-    private Post post;
-    private User user;
+    private String userName;
     public CommentDto(){}
     public CommentDto(Comment comment)
     {
+        this.id= comment.getId();
         this.Text=comment.getText();
+        this.userName=comment.getUser().getFirstName() + " " + comment.getUser().getLastName();
     }
     public Long getId()
     {
@@ -20,14 +21,10 @@ public class CommentDto {
     }
     public String getText() {return  Text;}
 
-    public User getUser()
+    public String getUser()
     {
-        return user;
+        return userName;
     }
 
-    public Post getPost()
-    {
-        return post;
-    }
 
 }

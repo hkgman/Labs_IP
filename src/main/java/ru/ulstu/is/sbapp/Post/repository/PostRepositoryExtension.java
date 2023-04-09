@@ -11,4 +11,5 @@ public interface PostRepositoryExtension {
     void safeRemoveAll();
     void addComment(Long id,Long userId,String text);
     void removeComment(Long id, Long commentId);
+    List<Comment> getPostComments(Long id);
 }

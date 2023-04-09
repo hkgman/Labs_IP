@@ -68,4 +68,12 @@ public class PostRepositoryImpl implements PostRepositoryExtension{
         }
     }
 
+    @Override
+    public List<Comment> getPostComments(Long id) {
+        TypedQuery<Comment> query =
+                em.createQuery("Select c from Comment c where post.id = :id",Comment.class)
+                        .setParameter("id",id);
+        return query.getResultList();
+    }
+
 }

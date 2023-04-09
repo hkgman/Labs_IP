@@ -2,13 +2,11 @@ package ru.ulstu.is.sbapp.Comment.controller;
 
 import org.springframework.web.bind.annotation.*;
 import ru.ulstu.is.sbapp.Comment.service.CommentService;
-import ru.ulstu.is.sbapp.Post.controller.PostDto;
-import ru.ulstu.is.sbapp.Post.service.PostService;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/controller")
+@RequestMapping("/comment")
 public class CommentController {
     private final CommentService commentService;
     public CommentController(CommentService commentService) {
@@ -31,7 +29,7 @@ public class CommentController {
 
     @PutMapping("/{id}")
     public CommentDto updateComment(@PathVariable Long id,
-                              @RequestParam("Text") String Text){
+                                    @RequestParam("Text") String Text){
         return new CommentDto(commentService.updateComment(id,Text));
     }
     @DeleteMapping("/{id}")

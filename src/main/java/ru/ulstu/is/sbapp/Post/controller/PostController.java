@@ -2,6 +2,8 @@ package ru.ulstu.is.sbapp.Post.controller;
 
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
+import ru.ulstu.is.sbapp.Comment.controller.CommentDto;
+import ru.ulstu.is.sbapp.Post.model.Post;
 import ru.ulstu.is.sbapp.Post.service.PostService;
 import ru.ulstu.is.sbapp.User.controller.UserDto;
 import ru.ulstu.is.sbapp.User.service.UserService;
@@ -25,6 +27,12 @@ public class PostController {
                 .map(PostDto::new)
                 .toList();
     }
+    @GetMapping("/{id}/comments")
+    public List<CommentDto> getComments(@PathVariable Long id) {
+        return postService.GetPostComments(id).stream()
+                .map(CommentDto::new)
+                .toList();
+    }
     @PostMapping
     public PostDto createPost(@RequestBody @Valid PostDto postDto){
         return new PostDto(postService.addPost(postDto));
@@ -32,19 +40,18 @@ public class PostController {
 
     @PutMapping("/{id}")
     public PostDto updatePost(@PathVariable Long id,
-                                @RequestParam("Heading") String Heading,
-                                @RequestParam("Content") String Content){
-        return new PostDto(postService.updatePost(id,Heading,Content));
+                              @RequestBody @Valid PostDto postDto){
+        return new PostDto(postService.updatePost(id,postDto));
     }
     @PostMapping("/{id}/Comment/{userId}")
     public void addComment(@PathVariable Long id,
                            @PathVariable Long userId,
-                        @RequestParam("Text") String Text) {
+                           @RequestParam("Text") String Text) {
         postService.addCommentToPost(id, userId,Text);
     }
-    @DeleteMapping("/{id}/Comment/{postId}")
+    @DeleteMapping("/{id}/Comment/{commentId}")
     public void removeComment(@PathVariable Long id,
-                           @PathVariable Long commentId)
+                              @PathVariable Long commentId)
     {
         postService.removeCommentFromPost(id,commentId);
     }

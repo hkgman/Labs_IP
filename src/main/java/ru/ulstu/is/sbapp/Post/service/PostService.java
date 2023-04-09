@@ -12,6 +12,7 @@ import ru.ulstu.is.sbapp.Post.repository.PostRepository;
 import ru.ulstu.is.sbapp.User.model.User;
 import ru.ulstu.is.sbapp.Util.validation.ValidatorUtil;
 
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Optional;
 
@@ -46,14 +47,20 @@ public class PostService {
     }
 
     @Transactional
-    public Post updatePost(Long id, String Heading, String Content) {
+    public Post updatePost(Long id, PostDto postDto) {
         final Post currentPost = findPost(id);
-        currentPost.setHeading(Heading);
-        currentPost.setContent(Content);
+        currentPost.setHeading(postDto.getHeading());
+        currentPost.setContent(postDto.getContent());
+        currentPost.setImage(postDto.getImage().getBytes(StandardCharsets.UTF_8));
         validatorUtil.validate(currentPost);
         return postRepository.save(currentPost);
     }
 
+    @Transactional
+    public List<Comment> GetPostComments(Long id)
+    {
+        return postRepository.getPostComments(id);
+    }
     @Transactional
     public Post deletePost(Long id) {
         final Optional<Post> post = postRepository.safeRemove(id);

@@ -1,5 +1,6 @@
 package ru.ulstu.is.sbapp.Comment.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import ru.ulstu.is.sbapp.Post.model.Post;
@@ -16,9 +17,11 @@ public class Comment {
     private String Text;
 
     @ManyToOne(fetch = FetchType.EAGER,cascade = CascadeType.MERGE)
+    @JsonIgnore
     private Post post;
 
     @ManyToOne(fetch = FetchType.EAGER,cascade = CascadeType.MERGE)
+    @JsonIgnore
     private User user;
 
     public Comment()

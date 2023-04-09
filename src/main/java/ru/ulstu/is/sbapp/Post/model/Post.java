@@ -1,5 +1,6 @@
 package ru.ulstu.is.sbapp.Post.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import ru.ulstu.is.sbapp.Comment.model.Comment;
@@ -27,6 +28,7 @@ public class Post {
     private byte[] image;
 
     @ManyToOne(fetch = FetchType.EAGER,cascade = CascadeType.MERGE)
+    @JsonIgnore
     private User user;
 
     @OneToMany(mappedBy = "post",fetch = FetchType.EAGER,cascade = CascadeType.ALL,orphanRemoval = true)
