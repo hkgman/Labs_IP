@@ -71,7 +71,6 @@ export default function Post(props) {
                 "Content-Type":"application/json",
             }
         };
-        console.log(id);
         const requestUrl = `http://localhost:8080/post/${ad.id}/Comment/${id}`;
         const response=await fetch(requestUrl,requestParams);
         return await response.json;      
@@ -98,7 +97,6 @@ export default function Post(props) {
 
     const rem_but = function(id,event)
     {
-        console.log("Удаление")
         remove(id).then((result)=>{
             getAll();
         });

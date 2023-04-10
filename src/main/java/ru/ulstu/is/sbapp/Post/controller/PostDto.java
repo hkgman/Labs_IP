@@ -1,5 +1,6 @@
 package ru.ulstu.is.sbapp.Post.controller;
 
+import ru.ulstu.is.sbapp.Comment.controller.CommentDto;
 import ru.ulstu.is.sbapp.Comment.model.Comment;
 import ru.ulstu.is.sbapp.Post.model.Post;
 import ru.ulstu.is.sbapp.User.model.User;
@@ -15,17 +16,20 @@ public class PostDto {
 
     private String content;
 
-
+    private List<CommentDto> comments = new ArrayList<>();
     private String image;
 
 
     public PostDto(){}
-    public PostDto(Post post)
-    {
-        this.id= post.getId();
+    public PostDto(Post post) {
+        this.id = post.getId();
         this.heading = post.getHeading();
         this.content = post.getContent();
         this.image = new String(post.getImage(), StandardCharsets.UTF_8);
+        if (post.getComments() != null) {
+            comments = post.getComments().stream()
+                    .map(CommentDto::new).toList();
+        }
     }
 
 
@@ -40,6 +44,11 @@ public class PostDto {
     public String getContent()
     {
         return content;
+    }
+
+    public List<CommentDto> getComments()
+    {
+        return comments;
     }
     public String getImage() {
         return image;

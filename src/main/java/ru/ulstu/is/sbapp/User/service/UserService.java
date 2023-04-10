@@ -2,8 +2,10 @@ package ru.ulstu.is.sbapp.User.service;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.ulstu.is.sbapp.Comment.repository.CommentRepository;
 import ru.ulstu.is.sbapp.Post.controller.PostDto;
 import ru.ulstu.is.sbapp.Post.model.Post;
+import ru.ulstu.is.sbapp.Post.repository.PostRepository;
 import ru.ulstu.is.sbapp.Post.service.PostNotFoundException;
 import ru.ulstu.is.sbapp.User.model.User;
 
@@ -17,12 +19,18 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepository userRepository;
+
+    private final PostRepository postRepository;
+
+    private final CommentRepository commentRepository;
     private final ValidatorUtil validatorUtil;
 
-    public UserService(UserRepository userRepository, ValidatorUtil validatorUtil)
+    public UserService(UserRepository userRepository, ValidatorUtil validatorUtil,PostRepository postRepository,CommentRepository commentRepository)
     {
         this.userRepository=userRepository;
         this.validatorUtil=validatorUtil;
+        this.postRepository=postRepository;
+        this.commentRepository=commentRepository;
     }
     @Transactional
     public User addUser(String firstName, String lastName, String email) {
@@ -53,24 +61,27 @@ public class UserService {
     }
 
     @Transactional
-    public User deleteUser(Long id) {
-        final Optional<User> user = userRepository.safeRemove(id);
-        return user.orElseThrow(() -> new PostNotFoundException(id));
+    public void deleteUser(Long id) {
+        userRepository.deleteById(id);
     }
 
     @Transactional
     public void deleteAllUsers() {
-        userRepository.safeRemoveAll();
+        commentRepository.deleteAll();
+        postRepository.deleteAll();
+        userRepository.deleteAll();
     }
 
     @Transactional
-    public void addNewPost(Long id, String Heading, String Content,byte[] img) {
-        userRepository.addPost(id,Heading,Content,img);
-    }
-    @Transactional
-    public void addNewPost(Long id, PostDto post)
+    public void addNewPost(Long id, PostDto postDto)
     {
-        userRepository.addPost(id,post);
+        Optional<User> currentUser = userRepository.findById(id);
+        if(currentUser.isPresent())
+        {
+            Post post = new Post(postDto);
+            post.setUser(currentUser.get());
+            postRepository.save(post);
+        }
     }
     @Transactional
     public List<Post> GetUserPosts(Long id)
@@ -79,6 +90,6 @@ public class UserService {
     }
     @Transactional
     public void deletePost(Long id, Long postId) {
-        userRepository.removePost(id,postId);
+        postRepository.deleteById(postId);
     }
 }

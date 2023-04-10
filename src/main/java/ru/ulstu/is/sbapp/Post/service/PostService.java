@@ -1,15 +1,13 @@
 package ru.ulstu.is.sbapp.Post.service;
 
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 import ru.ulstu.is.sbapp.Comment.model.Comment;
 import ru.ulstu.is.sbapp.Comment.repository.CommentRepository;
 import ru.ulstu.is.sbapp.Post.controller.PostDto;
 import ru.ulstu.is.sbapp.Post.model.Post;
 import ru.ulstu.is.sbapp.Post.repository.PostRepository;
-import ru.ulstu.is.sbapp.User.model.User;
+import ru.ulstu.is.sbapp.User.repository.UserRepository;
 import ru.ulstu.is.sbapp.Util.validation.ValidatorUtil;
 
 import java.nio.charset.StandardCharsets;
@@ -20,13 +18,15 @@ import java.util.Optional;
 public class PostService {
     private final PostRepository postRepository;
     private final CommentRepository commentRepository;
+    private final UserRepository userRepository;
     private final ValidatorUtil validatorUtil;
 
-    public PostService(PostRepository postRepository,CommentRepository commentRepository,ValidatorUtil validatorUtil)
+    public PostService(PostRepository postRepository,CommentRepository commentRepository,ValidatorUtil validatorUtil,UserRepository userRepository)
     {
         this.postRepository=postRepository;
         this.commentRepository=commentRepository;
         this.validatorUtil=validatorUtil;
+        this.userRepository=userRepository;
     }
     @Transactional
     public Post addPost(PostDto postDto) {
@@ -62,23 +62,39 @@ public class PostService {
         return postRepository.getPostComments(id);
     }
     @Transactional
-    public Post deletePost(Long id) {
-        final Optional<Post> post = postRepository.safeRemove(id);
-        return post.orElseThrow(() -> new PostNotFoundException(id));
+    public void deletePost(Long id) {
+        postRepository.deleteById(id);
     }
 
     @Transactional
     public void deleteAllPosts() {
-        postRepository.safeRemoveAll();
+        commentRepository.deleteAll();
+        postRepository.deleteAll();
     }
 
     @Transactional
     public void addCommentToPost(Long id, Long userId, String text){
-        postRepository.addComment(id, userId, text);
+        Optional<Post> optionalPost = postRepository.findById(id);
+        if(optionalPost.isPresent()) {
+            Comment comment = new Comment(text);
+            comment.setPost(optionalPost.get(), userRepository.findById(userId).get());
+            commentRepository.save(comment);
+        }
+        postRepository.save(optionalPost.get());
     }
 
     @Transactional
     public void removeCommentFromPost(Long id, Long commentId){
-        postRepository.removeComment(id,commentId);
+        Optional<Comment> optionalComment = commentRepository.findById(commentId);
+        optionalComment.get().setPost(null, null);
+        Optional <Post> postOptional = postRepository.findById(id);
+        postOptional.get().getComments().remove(optionalComment.get());
+        commentRepository.deleteById(commentId);
+    }
+
+    @Transactional
+    public List<Post> getPostsAndComments(String text)
+    {
+        return postRepository.getPostsAndComments(text);
     }
 }

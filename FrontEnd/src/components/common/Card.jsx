@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import ModalEdit from './ModalComment';
+import TablePostAndComment from './TablePostAndComment';
 export default function Card(props) {
     
     function edit(id) {
@@ -12,8 +13,8 @@ export default function Card(props) {
     useEffect(() => {
         getAll();
     }, []);
+    
     const [clients, setClientst] = useState([]);
-    const [userId, setUserId]=useState();
     const getAll = async function () {
         const requestUrl = "http://localhost:8080/user";
         const response = await fetch(requestUrl);
@@ -70,10 +71,12 @@ export default function Card(props) {
                                 <button href="#"
                                     className="btn btn-outline-primary mx-3"
                                     onClick={(e) => remove(item.id, e)}><i className="fa-sharp fa-solid fa-trash"></i></button>
-                                <button href="#"
-                                    className="btn btn-outline-primary mx-2" onClick={(e) => handleEdit(item.id)}><i className="fa-solid fa-comment"></i></button>
                                 <a href={`/Post?id=${item.id}`} className='btn btn-outline-primary mx-2'><i className="fa-solid fa-envelopes-bulk"></i></a>   
                             </div>
+                            <TablePostAndComment
+                                comments={item.comments}
+                                value={props.value}
+                            />
                         </div>
                     </div>
                 )

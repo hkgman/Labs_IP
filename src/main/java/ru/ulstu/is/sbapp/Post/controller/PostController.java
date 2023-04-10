@@ -58,13 +58,20 @@ public class PostController {
 
 
     @DeleteMapping("/{id}")
-    public PostDto deletePost(@PathVariable Long id) {
-        return new PostDto(postService.deletePost(id));
+    public void deletePost(@PathVariable Long id) {
+        postService.deletePost(id);
     }
 
     @DeleteMapping
     public void deleteall()
     {
         postService.deleteAllPosts();
+    }
+
+    @GetMapping("/filteredposts")
+    public List<PostDto> getPostsAndComments(@RequestParam("Text") String Text){
+        return postService.getPostsAndComments(Text).stream()
+                .map(PostDto::new)
+                .toList();
     }
 }

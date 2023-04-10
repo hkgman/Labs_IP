@@ -10,7 +10,7 @@ export default function Catalog(props) {
     const [modalVisible, setModalVisible] = useState(false);
     const [isEdit, setEdit] = useState(false);
     const [userId,setUserId] = useState(0);
-
+    const [value,setvalue]=useState('');
     useEffect(() => {
         loadItems();
     }, []);
@@ -19,13 +19,25 @@ export default function Catalog(props) {
     {
        loadItems();
     },[userId])
+
+
+    useEffect(()=>
+    {
+        loadItems2();
+    },[value])
     const setUserIDd = async function(id)
     {
         setUserId(id);
-        console.log(id);
     }
     const loadItems = async function() {
         const requestUrl = `http://localhost:8080/user/${userId}/posts`;
+        const response = await fetch(requestUrl);
+        const posts = await response.json();
+        setItems(posts);   
+    }
+
+    const loadItems2 = async function() {
+        const requestUrl = `http://localhost:8080/post/filteredposts?Text=${value}`;
         const response = await fetch(requestUrl);
         const posts = await response.json();
         console.log(posts);
@@ -36,7 +48,6 @@ export default function Catalog(props) {
         if (!isEdit) {
             const requestUrl = `http://localhost:8080/user/${userId}/Post`;
             const temppost=JSON.stringify(props.data)
-            console.log(temppost);
             const requestParams = {
                 method: "POST",
                 headers: {
@@ -70,7 +81,6 @@ export default function Catalog(props) {
     
 
     const edit = async function(editedId) {
-        console.log(editedId);
         const requestUrl = "http://localhost:8080/post/"+editedId;
         const requestParams = {
             mode: 'cors'
@@ -90,7 +100,6 @@ export default function Catalog(props) {
 
     const handleRemove = async function(id) {
             if (confirm('Удалить выбранные элементы?')) {
-                console.log(id);
                 const requestUrl = `http://localhost:8080/user/${userId}/Post/`+id;
                 const requestParams = {
                     method: "DELETE",
@@ -111,9 +120,11 @@ export default function Catalog(props) {
     function handleModalDone() {
         saveItem();
     }
+    
 
     return (
         <>
+            <div className="mx-3 my-2"><input type="text" id="search" className="form-control" required onChange={(event)=> setvalue(event.target.value)}/></div>
             <Toolbar 
                 onAdd={handleAdd}
                 getUser={setUserIDd}
@@ -121,6 +132,7 @@ export default function Catalog(props) {
             <Table 
                 headers={props.headers} 
                 items={items}
+                value={value}
                 userId={userId}
                 selectable={true}
                 onEdit={edit}

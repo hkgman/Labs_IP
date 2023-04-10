@@ -28,7 +28,6 @@ export default function News(props) {
     }
 
     function handleOnEdit(data) {
-        console.log(data);
         setData(new New(data));
     }
     function handleFormChange(event) {

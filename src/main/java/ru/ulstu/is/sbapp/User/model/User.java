@@ -24,10 +24,10 @@ public class User {
     @NotBlank(message = "email cannot be null")
     private String email;
 
-    @OneToMany(mappedBy ="user",cascade = CascadeType.MERGE,fetch = FetchType.EAGER)
+    @OneToMany(mappedBy ="user",cascade = {CascadeType.MERGE,CascadeType.REMOVE},fetch = FetchType.EAGER)
     private List<Post> posts =new ArrayList<>();
 
-    @OneToMany(mappedBy ="user",cascade = CascadeType.MERGE,fetch = FetchType.EAGER)
+    @OneToMany(mappedBy ="user",cascade = {CascadeType.MERGE,CascadeType.REMOVE},fetch = FetchType.EAGER)
     private List<Comment> comments =new ArrayList<>();
 
     public User() {
