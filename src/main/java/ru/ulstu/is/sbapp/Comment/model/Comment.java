@@ -17,11 +17,9 @@ public class Comment {
     private String Text;
 
     @ManyToOne(fetch = FetchType.EAGER,cascade = CascadeType.MERGE)
-    @JsonIgnore
     private Post post;
 
     @ManyToOne(fetch = FetchType.EAGER,cascade = CascadeType.MERGE)
-    @JsonIgnore
     private User user;
 
     public Comment()

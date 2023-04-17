@@ -28,7 +28,6 @@ public class Post {
     private byte[] image;
 
     @ManyToOne(fetch = FetchType.EAGER,cascade = CascadeType.MERGE)
-    @JsonIgnore
     private User user;
 
     @OneToMany(mappedBy = "post",fetch = FetchType.EAGER,cascade = {CascadeType.MERGE,CascadeType.REMOVE},orphanRemoval = true)
