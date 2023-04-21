@@ -5,11 +5,12 @@ import org.springframework.web.bind.annotation.*;
 import ru.ulstu.is.sbapp.Post.model.PostDto;
 import ru.ulstu.is.sbapp.User.model.UserDto;
 import ru.ulstu.is.sbapp.User.service.UserService;
+import ru.ulstu.is.sbapp.WebConfiguration;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping(WebConfiguration.REST_API + "/user")
 public class UserController {
     private final UserService userService;
     public UserController(UserService userService) {
