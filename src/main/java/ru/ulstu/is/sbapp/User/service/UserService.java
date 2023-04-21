@@ -3,10 +3,9 @@ package ru.ulstu.is.sbapp.User.service;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.ulstu.is.sbapp.Comment.service.CommentService;
-import ru.ulstu.is.sbapp.Post.controller.PostDto;
+import ru.ulstu.is.sbapp.Post.model.PostDto;
 import ru.ulstu.is.sbapp.Post.model.Post;
 import ru.ulstu.is.sbapp.Post.repository.PostRepository;
-import ru.ulstu.is.sbapp.Post.service.PostService;
 import ru.ulstu.is.sbapp.User.model.User;
 
 import ru.ulstu.is.sbapp.User.repository.UserRepository;

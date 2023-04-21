@@ -2,8 +2,8 @@ package ru.ulstu.is.sbapp.User.controller;
 
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
-import ru.ulstu.is.sbapp.Post.controller.PostDto;
-import ru.ulstu.is.sbapp.Post.model.Post;
+import ru.ulstu.is.sbapp.Post.model.PostDto;
+import ru.ulstu.is.sbapp.User.model.UserDto;
 import ru.ulstu.is.sbapp.User.service.UserService;
 
 import java.util.List;

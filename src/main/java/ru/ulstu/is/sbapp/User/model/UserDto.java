@@ -1,4 +1,4 @@
-package ru.ulstu.is.sbapp.User.controller;
+package ru.ulstu.is.sbapp.User.model;
 
 import ru.ulstu.is.sbapp.Comment.model.Comment;
 import ru.ulstu.is.sbapp.Post.model.Post;

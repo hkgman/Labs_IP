@@ -1,10 +1,8 @@
 package ru.ulstu.is.sbapp.Post.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import ru.ulstu.is.sbapp.Comment.model.Comment;
-import ru.ulstu.is.sbapp.Post.controller.PostDto;
 import ru.ulstu.is.sbapp.User.model.User;
 
 import java.util.ArrayList;

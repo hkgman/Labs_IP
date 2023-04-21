@@ -1,6 +1,7 @@
 package ru.ulstu.is.sbapp.Comment.controller;
 
 import org.springframework.web.bind.annotation.*;
+import ru.ulstu.is.sbapp.Comment.model.CommentDto;
 import ru.ulstu.is.sbapp.Comment.service.CommentService;
 
 import java.util.List;

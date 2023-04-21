@@ -1,9 +1,7 @@
-package ru.ulstu.is.sbapp.Post.controller;
+package ru.ulstu.is.sbapp.Post.model;
 
-import ru.ulstu.is.sbapp.Comment.controller.CommentDto;
-import ru.ulstu.is.sbapp.Comment.model.Comment;
+import ru.ulstu.is.sbapp.Comment.model.CommentDto;
 import ru.ulstu.is.sbapp.Post.model.Post;
-import ru.ulstu.is.sbapp.User.model.User;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;

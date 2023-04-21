@@ -8,7 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import ru.ulstu.is.sbapp.Comment.controller.CommentDto;
+import ru.ulstu.is.sbapp.Comment.model.CommentDto;
 import ru.ulstu.is.sbapp.Comment.model.Comment;
 import ru.ulstu.is.sbapp.Comment.service.CommentNotFoundException;
 import ru.ulstu.is.sbapp.Comment.service.CommentService;

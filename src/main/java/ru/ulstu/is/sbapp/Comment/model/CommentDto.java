@@ -1,8 +1,5 @@
-package ru.ulstu.is.sbapp.Comment.controller;
+package ru.ulstu.is.sbapp.Comment.model;
 
-import ru.ulstu.is.sbapp.Comment.model.Comment;
-import ru.ulstu.is.sbapp.Post.model.Post;
-import ru.ulstu.is.sbapp.User.model.User;
 
 public class CommentDto {
     private Long id;
