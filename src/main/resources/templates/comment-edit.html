@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{default}" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+</head>
+<body>
+<div layout:fragment="content">
+    <div th:text="${errors}" class="margin-bottom alert-danger"></div>
+    <form>
+        <div class="mb-3">
+            <select id="selectBox">
+                <option th:each="value: ${users}" th:selected="${selectBox} == ${value}">
+                    <span th:text="${value.firstName}"></span>
+                </option>
+            </select>
+            <input className="form-control" id="commentText" type="text" defaultValue="" required/>
+            <a class="btn btn-outline-primary text-center mx-2">
+                +
+            </a>
+        </div>
+    </form>
+</div>
+</body>
+</html>

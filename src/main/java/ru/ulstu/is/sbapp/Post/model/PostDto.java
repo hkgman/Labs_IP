@@ -14,6 +14,7 @@ public class PostDto {
 
     private String content;
 
+    private Long userId;
     private List<CommentDto> comments = new ArrayList<>();
     private String image;
 
@@ -28,6 +29,7 @@ public class PostDto {
             comments = post.getComments().stream()
                     .map(CommentDto::new).toList();
         }
+        userId=post.getUser().getId();
     }
 
 
@@ -51,4 +53,22 @@ public class PostDto {
     public String getImage() {
         return image;
     }
+
+    public void setHeading(String Heading)
+    {
+        this.heading=Heading;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public void setComments(List<CommentDto> comments) {
+        this.comments = comments;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
 }

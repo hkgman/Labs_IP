@@ -17,7 +17,7 @@ public class UserMvcController {
         this.userService=userService;
     }
     @GetMapping
-    public String getUser(Model model) {
+    public String getUsers(Model model) {
         model.addAttribute("users",
                 userService.findAllUsers().stream()
                         .map(UserDto::new)

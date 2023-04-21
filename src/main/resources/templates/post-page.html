@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{default}" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+</head>
+<body>
+
+<div layout:fragment="content">
+    <div class="da d-flex my-2">
+        <div><img class="imga img-fluid float-start mx-2" style="width:500px;height:300px" src=${post.image}/></div>
+        <div class="container-fluid my-2 mx-1">
+            <h1 th:text="${post.heading}"></h1>
+            <p>[[${post.content}]]</p>
+        </div>
+    </div>
+    <!--Вот тут кнопка для добавления комментариев (для будущего тебя)-->
+    <a class="btn btn-outline-primary text-center mx-2">
+        +
+    </a>
+    <div className="d-flex mx-2">
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Пользователь</th>
+                    <th scope="col">Содержимое</th>
+                    <th scope="col"></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="comment, iterator: ${comments}">
+                    <th scope="row" th:text="${iterator.index} + 1"/>
+                    <td th:text="${comment.user}" style="width: 60%"/>
+                    <td th:text="${comment.text}" style="width: 60%"/>
+                    <td style="width: 10%">
+                        <div class="btn-group" role="group" aria-label="Basic example">
+                            <!--НУЖНО СДЕЛАТЬ!!!-->
+                            <a class="btn btn-outline-light text-center mx-2">
+                                <i class="fa fa-pencil" aria-hidden="true"></i> Изменить
+                            </a>
+                            <button type="button" class="btn btn-outline-light text-center mx-2"
+                                    th:attr="onclick=|confirm('Удалить запись?') && document.getElementById('remove-${comment.id}').click()|">
+                                <i class="fa fa-trash" aria-hidden="true"></i> Удалить
+                            </button>
+                        </div>
+                        <form th:action="@{/post/deleteComment/{id}(id=${post.id})/{commentId}(commentId=${comment.id}}" method="post">
+                            <button th:id="'remove-' + ${comment.id}" type="submit" style="display: none">
+                                Удалить
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</div>
+</body>
+<th:block layout:fragment="scripts">
+    <script>
+
+    </script>
+</th:block>
+</html>

@@ -5,11 +5,12 @@ import org.springframework.web.bind.annotation.*;
 import ru.ulstu.is.sbapp.Comment.model.CommentDto;
 import ru.ulstu.is.sbapp.Post.model.PostDto;
 import ru.ulstu.is.sbapp.Post.service.PostService;
+import ru.ulstu.is.sbapp.WebConfiguration;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/post")
+@RequestMapping(WebConfiguration.REST_API + "/post")
 public class PostController {
     private final PostService postService;
     public PostController(PostService postService) {
