@@ -3,11 +3,11 @@ package ru.ulstu.is.sbapp.Post.service;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.ulstu.is.sbapp.Comment.model.Comment;
-import ru.ulstu.is.sbapp.Comment.repository.CommentRepository;
+import ru.ulstu.is.sbapp.Comment.service.CommentService;
 import ru.ulstu.is.sbapp.Post.controller.PostDto;
 import ru.ulstu.is.sbapp.Post.model.Post;
 import ru.ulstu.is.sbapp.Post.repository.PostRepository;
-import ru.ulstu.is.sbapp.User.repository.UserRepository;
+import ru.ulstu.is.sbapp.User.service.UserService;
 import ru.ulstu.is.sbapp.Util.validation.ValidatorUtil;
 
 import java.nio.charset.StandardCharsets;
@@ -17,22 +17,27 @@ import java.util.Optional;
 @Service
 public class PostService {
     private final PostRepository postRepository;
-    private final CommentRepository commentRepository;
-    private final UserRepository userRepository;
+    private final CommentService commentService;
+    private final UserService userService;
     private final ValidatorUtil validatorUtil;
 
-    public PostService(PostRepository postRepository,CommentRepository commentRepository,ValidatorUtil validatorUtil,UserRepository userRepository)
+    public PostService(PostRepository postRepository, CommentService commentService, ValidatorUtil validatorUtil, UserService userService)
     {
         this.postRepository=postRepository;
-        this.commentRepository=commentRepository;
+        this.commentService = commentService;
         this.validatorUtil=validatorUtil;
-        this.userRepository=userRepository;
+        this.userService = userService;
     }
     @Transactional
     public Post addPost(PostDto postDto) {
         final Post post = new Post(postDto);
         validatorUtil.validate(post);
         return postRepository.save(post);
+    }
+
+    @Transactional
+    public void savePost(Post post) {
+        postRepository.save(post);
     }
 
     @Transactional(readOnly = true)
@@ -68,7 +73,7 @@ public class PostService {
 
     @Transactional
     public void deleteAllPosts() {
-        commentRepository.deleteAll();
+        commentService.deleteAllComments();
         postRepository.deleteAll();
     }
 
@@ -77,19 +82,19 @@ public class PostService {
         Optional<Post> optionalPost = postRepository.findById(id);
         if(optionalPost.isPresent()) {
             Comment comment = new Comment(text);
-            comment.setPost(optionalPost.get(), userRepository.findById(userId).get());
-            commentRepository.save(comment);
+            comment.setPost(optionalPost.get(), userService.findUser(userId));
+            commentService.saveComment(comment);
         }
         postRepository.save(optionalPost.get());
     }
 
     @Transactional
     public void removeCommentFromPost(Long id, Long commentId){
-        Optional<Comment> optionalComment = commentRepository.findById(commentId);
-        optionalComment.get().setPost(null, null);
+        Comment optionalComment = commentService.findComment(commentId);
+        optionalComment.setPost(null, null);
         Optional <Post> postOptional = postRepository.findById(id);
-        postOptional.get().getComments().remove(optionalComment.get());
-        commentRepository.deleteById(commentId);
+        postOptional.get().getComments().remove(optionalComment);
+        commentService.deleteComment(commentId);
     }
 
     @Transactional

@@ -2,11 +2,11 @@ package ru.ulstu.is.sbapp.User.service;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.ulstu.is.sbapp.Comment.repository.CommentRepository;
+import ru.ulstu.is.sbapp.Comment.service.CommentService;
 import ru.ulstu.is.sbapp.Post.controller.PostDto;
 import ru.ulstu.is.sbapp.Post.model.Post;
 import ru.ulstu.is.sbapp.Post.repository.PostRepository;
-import ru.ulstu.is.sbapp.Post.service.PostNotFoundException;
+import ru.ulstu.is.sbapp.Post.service.PostService;
 import ru.ulstu.is.sbapp.User.model.User;
 
 import ru.ulstu.is.sbapp.User.repository.UserRepository;
@@ -22,15 +22,15 @@ public class UserService {
 
     private final PostRepository postRepository;
 
-    private final CommentRepository commentRepository;
+    private final CommentService commentService;
     private final ValidatorUtil validatorUtil;
 
-    public UserService(UserRepository userRepository, ValidatorUtil validatorUtil,PostRepository postRepository,CommentRepository commentRepository)
+    public UserService(UserRepository userRepository, ValidatorUtil validatorUtil, PostRepository postRepository, CommentService commentService)
     {
         this.userRepository=userRepository;
         this.validatorUtil=validatorUtil;
-        this.postRepository=postRepository;
-        this.commentRepository=commentRepository;
+        this.postRepository = postRepository;
+        this.commentService = commentService;
     }
     @Transactional
     public User addUser(String firstName, String lastName, String email) {
@@ -67,7 +67,7 @@ public class UserService {
 
     @Transactional
     public void deleteAllUsers() {
-        commentRepository.deleteAll();
+        commentService.deleteAllComments();
         postRepository.deleteAll();
         userRepository.deleteAll();
     }

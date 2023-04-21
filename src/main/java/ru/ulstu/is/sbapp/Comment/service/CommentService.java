@@ -29,6 +29,11 @@ public class CommentService {
         return commentRepository.save(comment);
     }
 
+    @Transactional
+    public void saveComment(Comment comment) {
+        commentRepository.save(comment);
+    }
+
     @Transactional(readOnly = true)
     public Comment findComment(Long id) {
         final Optional<Comment> client = commentRepository.findById(id);
