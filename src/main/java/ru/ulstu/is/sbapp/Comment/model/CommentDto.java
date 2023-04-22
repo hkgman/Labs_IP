@@ -5,12 +5,15 @@ public class CommentDto {
     private Long id;
     private String Text;
     private String userName;
+
+    private Long postId;
     public CommentDto(){}
     public CommentDto(Comment comment)
     {
         this.id= comment.getId();
         this.Text=comment.getText();
         this.userName=comment.getUser().getFirstName() + " " + comment.getUser().getLastName();
+        postId=comment.getPost().getId();
     }
     public Long getId()
     {
@@ -23,5 +26,16 @@ public class CommentDto {
         return userName;
     }
 
+    public Long getPostId()
+    {
+        return postId;
+    }
 
+    public void setText(String text) {
+        Text = text;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
 }

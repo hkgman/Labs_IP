@@ -46,6 +46,8 @@ public class PostDto {
         return content;
     }
 
+    public Long getUserId(){return userId;}
+
     public List<CommentDto> getComments()
     {
         return comments;
@@ -70,5 +72,6 @@ public class PostDto {
     public void setImage(String image) {
         this.image = image;
     }
+    public void setUserId(Long id){this.userId=id;}
 
 }

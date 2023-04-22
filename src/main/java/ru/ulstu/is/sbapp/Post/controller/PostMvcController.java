@@ -86,17 +86,55 @@ public class PostMvcController {
         return "redirect:/post";
     }
 
-    @PostMapping("/delete/{id}/{postId}")
-    public String deletePost(@PathVariable Long id,
+    @PostMapping("/delete/{userId}/{postId}")
+    public String deletePost(@PathVariable Long userId,
                              @PathVariable Long postId) {
-        userService.deletePost(id,postId);
+        userService.deletePost(userId,postId);
         return "redirect:/post";
     }
-
-    @PostMapping("/deleteComment/{id}/{commentId}")
-    public String deleteComment(@PathVariable Long id,
+    @PostMapping("/deleteComment/{postId}/{commentId}")
+    public String deleteComment(@PathVariable Long postId,
                              @PathVariable Long commentId) {
-        postService.removeCommentFromPost(id,commentId);
-        return "redirect:/post";
+        postService.removeCommentFromPost(postId,commentId);
+        return "redirect:/post/{postId}";
+    }
+
+    @GetMapping(value = {"/add/{postId}/{userId}", "/editComment/{id}"})
+    public String editComment(@PathVariable(required = false) Long id,
+                              @PathVariable(required = false) Long postId,
+                           @PathVariable(required = false) Long userId,
+                           Model model) {
+        if (id == null || id <= 0) {
+            model.addAttribute("postId", postId);
+            model.addAttribute("userId",userId);
+            model.addAttribute("CommentDto", new CommentDto(commentService.findComment(id)));
+            return "comment-create";
+        } else {
+            model.addAttribute("id", id);
+            model.addAttribute("commentDto", new CommentDto(commentService.findComment(id)));
+            return "comment-edit";
+        }
+
+    }
+
+    @PostMapping(value = {"/{postId}/{userId}", "/comment/{id}"})
+    public String saveComment(@PathVariable(required = false) Long id,
+                           @PathVariable(required = false) Long userId,
+                          @PathVariable(required = false) Long postId,
+                           @ModelAttribute @Valid CommentDto commentDto,
+                           BindingResult bindingResult,
+                           Model model) {
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("errors", bindingResult.getAllErrors());
+            return "comment-edit";
+        }
+        if (id == null || id <= 0 && userId!=null) {
+            postService.addCommentToPost(id,userId,commentDto.getText());
+            return "redirect:/post-page/{postId}";
+        } else {
+            commentService.updateComment(id, commentDto.getText());
+            return "redirect:/post";
+        }
+
     }
 }

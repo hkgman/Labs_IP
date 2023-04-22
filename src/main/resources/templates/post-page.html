@@ -37,7 +37,7 @@
                     <td style="width: 10%">
                         <div class="btn-group" role="group" aria-label="Basic example">
                             <!--НУЖНО СДЕЛАТЬ!!!-->
-                            <a class="btn btn-outline-light text-center mx-2">
+                            <a class="btn btn-outline-light text-center mx-2" th:href="@{/post/editComment/{id}(id=${comment.id})}">
                                 <i class="fa fa-pencil" aria-hidden="true"></i> Изменить
                             </a>
                             <button type="button" class="btn btn-outline-light text-center mx-2"
@@ -45,7 +45,7 @@
                                 <i class="fa fa-trash" aria-hidden="true"></i> Удалить
                             </button>
                         </div>
-                        <form th:action="@{/post/deleteComment/{id}(id=${post.id})/{commentId}(commentId=${comment.id}}" method="post">
+                        <form th:action="@{'/post/deleteComment/' + ${comment.postId} + '/' + ${comment.id}}" method="post">
                             <button th:id="'remove-' + ${comment.id}" type="submit" style="display: none">
                                 Удалить
                             </button>

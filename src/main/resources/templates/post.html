@@ -46,8 +46,15 @@
                            th:href="@{/post/edit/{id}(id=${post.id})}">
                             <i class="fa fa-pencil" aria-hidden="true"></i> Изменить
                         </a>
-                        <button href="#"
-                                class="btn btn-outline-primary mx-3"><i class="fa-sharp fa-solid fa-trash"></i></button>
+                        <button type="button" class="btn btn-outline-primary text-center mx-2"
+                                th:attr="onclick=|confirm('Удалить запись?') && document.getElementById('remove-${post.id}').click()|">
+                            <i class="fa fa-trash" aria-hidden="true"></i> Удалить
+                        </button>
+                        <form th:action="@{'/post/delete/' + ${post.userId} + '/' + ${post.id}}" method="post">
+                            <button th:id="'remove-' + ${post.id}" type="submit" style="display: none">
+                                Удалить
+                            </button>
+                        </form>
                         <a th:href=@{/post/{id}(id=${post.id})} class='btn btn-outline-primary mx-2'><i class="fa-solid fa-envelopes-bulk"></i></a>
                     </div>
                 </div>
