@@ -8,7 +8,12 @@
 
 <div layout:fragment="content">
     <div class="d-flex float-start my-1">
-        <div class="mx-3"><input type="text" id="search" class="form-control" required /></div>
+        <form th:action="@{/post/filter}" class="d-flex">
+            <div class="mx-3"><input type="text" th:name="searchValue" id="search" class="form-control" required /></div>
+            <button type="submit" class="btn btn-outline-primary text-center mx-2">
+                <i class="fa-solid fa-magnifying-glass"></i>
+            </button>
+        </form>
         <div class="mx-3">
             <select id="selectBox">
                 <option th:each="value: ${users}" th:selected="${selectBox} == ${value}">
@@ -18,7 +23,7 @@
         </div>
         <div>
             <a class="btn btn-outline-primary text-center mx-2"
-               th:href="@{/post/add/{userId}(userId=${6352})}">
+               th:href="@{/post/edit}">
                 <!--Сам понимаешь что здесь надо сделать-->
                 +
             </a>
@@ -39,7 +44,23 @@
                         <p th:text="${post.content}"></p>
                     </div>
                     <div class="flex-grow-1 mx-2">
-                        <table class="table"></table>
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Пользователь</th>
+                                <th scope="col">Текст</th>
+                                <th scope="col"></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="comment, iterator: ${post.comments}">
+                                    <th scope="row" th:text="${iterator.index} + 1"/>
+                                    <td th:text="${comment.user}" style="width: 60%"/>
+                                    <td th:text="${comment.text}" style="width: 60%"/>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                     <div class="d-flex flex-row justify-content-end ">
                         <a class="btn btn-outline-primary text-center mx-2"

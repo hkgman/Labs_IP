@@ -13,7 +13,7 @@ public class CommentDto {
         this.id= comment.getId();
         this.Text=comment.getText();
         this.userName=comment.getUser().getFirstName() + " " + comment.getUser().getLastName();
-        postId=comment.getPost().getId();
+        this.postId=comment.getPost().getId();
     }
     public Long getId()
     {

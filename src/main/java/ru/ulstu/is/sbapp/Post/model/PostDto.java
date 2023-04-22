@@ -74,4 +74,5 @@ public class PostDto {
     }
     public void setUserId(Long id){this.userId=id;}
 
+    public void setId(Long id){this.id=id;}
 }

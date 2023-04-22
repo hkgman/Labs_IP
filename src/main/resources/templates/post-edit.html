@@ -7,10 +7,10 @@
 <body>
 <div layout:fragment="content">
     <div th:text="${errors}" class="margin-bottom alert-danger"></div>
-    <form action="#" th:action="@{/post/{id}(id=${id})}" th:object="${postDto}" method="post">
+    <form action="#" th:action="@{/post/{id}(id=${id})}" th:object="${postDto}" method="post" enctype="multipart/form-data">
         <div class="mb-3">
             <label for="image" class="form-label">Картинка</label>
-            <input type="file" class="form-control" id="image" th:field="${postDto.image}" required="true">
+            <input type="file" th:name="multipartFile" class="form-control" id="image" required="true">
         </div>
         <div class="mb-3">
             <label for="heading" class="form-label">Заголовок</label>
