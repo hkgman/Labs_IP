@@ -3,6 +3,7 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{default}" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
+    <script type="text/javascript" src="/webjars/jquery/3.6.0/jquery.min.js"></script>
 </head>
 <body>
 
@@ -14,13 +15,16 @@
                 <i class="fa-solid fa-magnifying-glass"></i>
             </button>
         </form>
-        <div class="mx-3">
-            <select id="selectBox">
-                <option th:each="value: ${users}" th:selected="${selectBox} == ${value}">
-                    <span th:text="${value.firstName}"></span>
-                </option>
-            </select>
-        </div>
+        <form th:action="@{/post/userPosts}" id="myForm" class="d-flex">
+            <div class="mx-3">
+                <select id="selectBox" th:name="userId">
+                    <option value="" disabled selected>Select your option</option>
+                    <option th:each="value: ${users}" th:selected="${selectBox} == ${value}">
+                        <span th:text="${value.Id}" th:value="${value.Id}"></span>
+                    </option>
+                </select>
+            </div>
+        </form>
         <div>
             <a class="btn btn-outline-primary text-center mx-2"
                th:href="@{/post/edit}">
@@ -86,7 +90,11 @@
 </body>
 <th:block layout:fragment="scripts">
     <script>
-
+        $(document).ready(function() {
+            $('#selectBox').on('change', function() {
+                this.form.submit();
+            });
+        });
     </script>
 </th:block>
 </html>

@@ -123,6 +123,21 @@ public class PostMvcController {
         return "redirect:/post/{postId}";
     }
 
+    @GetMapping("/userPosts")
+    public String getUserPosts(@RequestParam(value = "userId") Long userId,Model model)
+    {
+        model.addAttribute("posts",
+                userService.GetUserPosts(userId).stream()
+                        .map(PostDto::new)
+                        .toList());
+        model.addAttribute("users",
+                userService.findAllUsers().stream()
+                        .map(UserDto::new)
+                        .toList());
+        return "post";
+    }
+
+
     @GetMapping(value = {"/addComment/{postId}", "/editComment/{id}"})
     public String editComment(@PathVariable(required = false) Long id,
                               @PathVariable(required = false) Long postId,
