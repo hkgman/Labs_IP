@@ -110,10 +110,10 @@ public class PostMvcController {
         return "redirect:/post";
     }
 
-    @PostMapping("/delete/{userId}/{postId}")
-    public String deletePost(@PathVariable Long userId,
+    @PostMapping("/delete/{postId}")
+    public String deletePost(
                              @PathVariable Long postId) {
-        userService.deletePost(userId,postId);
+        postService.deletePost(postId);
         return "redirect:/post";
     }
     @PostMapping("/deleteComment/{postId}/{commentId}")

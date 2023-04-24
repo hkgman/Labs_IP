@@ -74,7 +74,7 @@
                                 th:attr="onclick=|confirm('Удалить запись?') && document.getElementById('remove-${post.id}').click()|">
                             <i class="fa fa-trash" aria-hidden="true"></i> Удалить
                         </button>
-                        <form th:action="@{'/post/delete/' + ${post.userId} + '/' + ${post.id}}" method="post">
+                        <form th:action="@{'/post/delete/' + ${post.id}}" method="post">
                             <button th:id="'remove-' + ${post.id}" type="submit" style="display: none">
                                 Удалить
                             </button>

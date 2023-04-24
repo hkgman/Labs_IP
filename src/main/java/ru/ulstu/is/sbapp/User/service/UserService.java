@@ -38,7 +38,7 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     public User findUser(Long id) {
         final Optional<User> user = userRepository.findById(id);
         return user.orElseThrow(() -> new UserNotFoundException(id));
@@ -65,13 +65,6 @@ public class UserService {
     }
 
     @Transactional
-    public void deleteAllUsers() {
-        commentService.deleteAllComments();
-        postRepository.deleteAll();
-        userRepository.deleteAll();
-    }
-
-    @Transactional
     public void addNewPost(Long id, PostDto postDto)
     {
         Optional<User> currentUser = userRepository.findById(id);
@@ -83,10 +76,19 @@ public class UserService {
         }
     }
     @Transactional
+    public void deleteAllUsers() {
+        commentService.deleteAllComments();
+        userRepository.deleteAll();
+    }
+
+
+    @Transactional
     public List<Post> GetUserPosts(Long id)
     {
         return userRepository.getUsersPosts(id);
     }
+
+
     @Transactional
     public void deletePost(Long id, Long postId) {
         postRepository.deleteById(postId);
