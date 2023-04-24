@@ -19,8 +19,7 @@
             <div class="mx-3">
                 <select id="selectBox" th:name="userId">
                     <option value="" disabled selected>Select your option</option>
-                    <option th:each="value: ${users}" th:selected="${selectBox} == ${value}">
-                        <span th:text="${value.Id}" th:value="${value.Id}"></span>
+                    <option th:each="value: ${users}" th:selected="${selectBox} == ${value}" th:text="${value.firstName}" th:value="${value.Id}">
                     </option>
                 </select>
             </div>
