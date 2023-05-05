@@ -20,6 +20,7 @@
                 <th scope="col">ID</th>
                 <th scope="col">Имя</th>
                 <th scope="col">Почта</th>
+                <th scope="col">Пароль</th>
                 <th scope="col"></th>
             </tr>
             </thead>
@@ -29,6 +30,7 @@
                 <td th:text="${user.id}"/>
                 <td th:text="${user.firstName} + ' ' + ${user.lastName}" style="width: 60%"/>
                 <td th:text="${user.email}" style="width: 60%"/>
+                <td th:text="${user.password}" style="width: 60%"/>
                 <td style="width: 10%">
                     <div class="btn-group" role="group" aria-label="Basic example">
                         <a class="btn btn-outline-light text-center mx-2"

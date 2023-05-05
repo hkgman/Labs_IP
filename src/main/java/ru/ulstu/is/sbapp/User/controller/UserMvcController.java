@@ -47,9 +47,9 @@ public class UserMvcController {
             return "user-edit";
         }
         if (id == null || id <= 0) {
-            userService.addUser(userDto.getFirstName(), userDto.getLastName(),userDto.getEmail());
+            userService.addUser(userDto.getFirstName(), userDto.getLastName(),userDto.getEmail(),userDto.getPassword());
         } else {
-            userService.updateUser(id, userDto.getFirstName(), userDto.getLastName(),userDto.getEmail());
+            userService.updateUser(id, userDto.getFirstName(), userDto.getLastName(),userDto.getEmail(),userDto.getPassword());
         }
         return "redirect:/user";
     }

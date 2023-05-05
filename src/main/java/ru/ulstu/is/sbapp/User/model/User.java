@@ -2,6 +2,7 @@ package ru.ulstu.is.sbapp.User.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import ru.ulstu.is.sbapp.Comment.model.Comment;
 import ru.ulstu.is.sbapp.Post.model.Post;
 
@@ -21,8 +22,16 @@ public class User {
     @NotBlank(message = "lastName cannot be null")
     private String lastName;
 
+    @Column(nullable = false, unique = true, length = 64)
     @NotBlank(message = "email cannot be null")
     private String email;
+
+    @Column(nullable = false, length = 64)
+    @NotBlank
+    @Size(min = 6, max = 64)
+    private String password;
+
+    private UserRole role;
 
     @OneToMany(mappedBy ="user",cascade = {CascadeType.MERGE,CascadeType.REMOVE},fetch = FetchType.EAGER)
     private List<Post> posts =new ArrayList<>();
@@ -32,11 +41,15 @@ public class User {
 
     public User() {
     }
-
-    public User(String firstName, String lastName, String email) {
+    public User(String firstName,String lastName,String email, String password) {
+        this(firstName,lastName,email, password, UserRole.USER);
+    }
+    public User(String firstName, String lastName, String email,String password,UserRole role) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email=email;
+        this.password=password;
+        this.role=role;
     }
 
 
@@ -80,6 +93,17 @@ public class User {
         this.email=email;
     }
 
+    public String getPassword()
+    {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+    public UserRole getRole() {
+        return role;
+    }
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -100,6 +124,7 @@ public class User {
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
                 ", posts=" + posts +'\''+
                 '}';
     }

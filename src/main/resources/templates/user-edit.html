@@ -21,6 +21,10 @@
             <input type="text" class="form-control" id="email" th:field="${userDto.email}" required="true">
         </div>
         <div class="mb-3">
+            <label for="password" class="form-label">Пароль</label>
+            <input type="text" class="form-control" id="password" th:field="${userDto.password}" required="true">
+        </div>
+        <div class="mb-3">
             <button type="submit" class="btn btn-primary button-fixed">
                 <span th:if="${id == null}">Добавить</span>
                 <span th:if="${id != null}">Обновить</span>

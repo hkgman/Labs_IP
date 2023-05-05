@@ -8,6 +8,7 @@ import ru.ulstu.is.sbapp.Post.model.Post;
 import ru.ulstu.is.sbapp.Post.repository.PostRepository;
 import ru.ulstu.is.sbapp.User.model.User;
 
+import ru.ulstu.is.sbapp.User.model.UserRole;
 import ru.ulstu.is.sbapp.User.repository.UserRepository;
 import ru.ulstu.is.sbapp.Util.validation.ValidatorUtil;
 
@@ -31,9 +32,12 @@ public class UserService {
         this.postRepository = postRepository;
         this.commentService = commentService;
     }
+    public User addUser(String firstName, String lastName, String email, String password) {
+        return addUser(firstName,lastName, email, password, UserRole.USER);
+    }
     @Transactional
-    public User addUser(String firstName, String lastName, String email) {
-        final User user = new User(firstName, lastName, email);
+    public User addUser(String firstName, String lastName, String email, String password, UserRole role) {
+        final User user = new User(firstName, lastName, email,password,role);
         validatorUtil.validate(user);
         return userRepository.save(user);
     }
@@ -50,11 +54,12 @@ public class UserService {
     }
 
     @Transactional
-    public User updateUser(Long id, String firstName, String lastName, String email) {
+    public User updateUser(Long id, String firstName, String lastName, String email,String password) {
         final User currentUser = findUser(id);
         currentUser.setFirstName(firstName);
         currentUser.setLastName(lastName);
         currentUser.setEmail(email);
+        currentUser.setPassword(password);
         validatorUtil.validate(currentUser);
         return userRepository.save(currentUser);
     }

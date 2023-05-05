@@ -34,17 +34,19 @@ public class UserController {
     }
     @PostMapping
     public UserDto createUser(@RequestParam("firstName") String firstName,
-                                  @RequestParam("lastName") String lastname,
-                                  @RequestParam("email") String email) {
-        return new UserDto(userService.addUser(firstName, lastname,email));
+                              @RequestParam("lastName") String lastname,
+                              @RequestParam("email") String email,
+                              @RequestParam("password") String password){
+        return new UserDto(userService.addUser(firstName, lastname,email,password));
     }
 
     @PutMapping("/{id}")
     public UserDto updateClient(@PathVariable Long id,
                                   @RequestParam("firstName") String firstName,
                                   @RequestParam("lastName") String lastname,
-                                  @RequestParam("email") String email){
-        return new UserDto(userService.updateUser(id, firstName, lastname,email));
+                                  @RequestParam("email") String email,
+                                @RequestParam("password") String password){
+        return new UserDto(userService.updateUser(id, firstName, lastname,email,password));
     }
     @PostMapping("/{id}/Post")
     public void addPost(@PathVariable Long id,

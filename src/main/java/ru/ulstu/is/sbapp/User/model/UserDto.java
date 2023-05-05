@@ -16,6 +16,10 @@ public class UserDto {
 
     private String email;
 
+    private UserRole role;
+
+    private String password;
+
     private List<Post> posts = new ArrayList<>();
 
     private List<Comment> comments = new ArrayList<>();
@@ -26,6 +30,8 @@ public class UserDto {
         this.firstName = user.getFirstName();
         this.lastName = user.getLastName();
         this.email= user.getEmail();
+        this.role=user.getRole();
+        this.password=user.getPassword();
     }
     public Long getId() {
         return id;
@@ -38,6 +44,15 @@ public class UserDto {
     public String getLastName() {
         return lastName;
     }
+
+    public String getPassword(){
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     public List<Post> getPosts()
     {
         return  posts;
@@ -47,7 +62,9 @@ public class UserDto {
         return  comments;
     }
 
-
+    public UserRole getRole() {
+        return role;
+    }
     public String getEmail()
     {
         return email;
