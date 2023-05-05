@@ -1,6 +1,5 @@
 package ru.ulstu.is.sbapp.Post.controller;
 
-import jakarta.servlet.ServletRegistration;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
@@ -17,7 +16,6 @@ import ru.ulstu.is.sbapp.User.service.UserService;
 
 import java.io.IOException;
 import java.util.Base64;
-import java.util.Optional;
 
 @Controller
 @RequestMapping("/post")
