@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{default}" xmlns:th="http://www.w3.org/1999/xhtml">
+<body>
+<div layout:fragment="content">
+    <div th:if="${param.error}" class="alert alert-danger margin-bottom">
+        User not found
+    </div>
+    <div th:if="${param.logout}" class="alert alert-success margin-bottom">
+        Logout success
+    </div>
+    <div th:if="${param.created}" class="alert alert-success margin-bottom">
+        User '<span th:text="${param.created}"></span>' was successfully created
+    </div>
+    <form th:action="@{/login}" method="post">
+        <div class="mb-3">
+            <p class="mb-1">Login</p>
+            <input name="username" id="username" class="form-control"
+                   type="text" required autofocus />
+        </div>
+        <div class="mb-3">
+            <p class="mb-1">Password</p>
+            <input name="password" id="password" class="form-control"
+                   type="password" required />
+        </div>
+        <div class="mb-3">
+            <button type="submit" class="btn btn-success">
+                Sing in
+            </button>
+        </div>
+        <div>
+            <p>
+                <span>Not a member yet?</span>
+                <a href="/signup">Sing Up here</a>
+            </p>
+        </div>
+    </form>
+</div>
+</body>
+</html>

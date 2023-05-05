@@ -8,7 +8,7 @@
 <div  layout:fragment="content">
     <div class="mx-auto my-3">
         <div th:text="${errors}" class="margin-bottom alert-danger"></div>
-        <form action="#" th:action="@{/post/comment/{id}(id=${id})}" th:object="${commentDto}" method="post">
+        <form action="#" th:action="@{/index/updateComment/{Id}(Id=${Id})}" th:object="${commentDto}" method="post">
             <div class="mb-3">
                 <div>
                     <input class="form-control" id="commentText" th:field="${commentDto.text}" type="text" defaultValue="" required/>

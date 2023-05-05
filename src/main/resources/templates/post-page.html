@@ -16,7 +16,7 @@
     </div>
     <!--Вот тут кнопка для добавления комментариев (для будущего тебя)-->
     <a class="btn btn-outline-primary text-center mx-2"
-       th:href="@{/post/addComment/{postId}(postId=${post.id})}">
+       th:href="@{/index/addComment/{postId}(postId=${post.id})}">
         +
     </a>
     <div className="d-flex mx-2">
@@ -38,7 +38,7 @@
                     <td style="width: 10%">
                         <div class="btn-group" role="group" aria-label="Basic example">
                             <!--НУЖНО СДЕЛАТЬ!!!-->
-                            <a class="btn btn-outline-light text-center mx-2" th:href="@{/post/editComment/{id}(id=${comment.id})}">
+                            <a class="btn btn-outline-light text-center mx-2" th:href="@{/index/editComment/{Id}(Id=${comment.id})}">
                                 <i class="fa fa-pencil" aria-hidden="true"></i> Изменить
                             </a>
                             <button type="button" class="btn btn-outline-light text-center mx-2"
@@ -46,7 +46,7 @@
                                 <i class="fa fa-trash" aria-hidden="true"></i> Удалить
                             </button>
                         </div>
-                        <form th:action="@{'/post/deleteComment/' + ${comment.postId} + '/' + ${comment.id}}" method="post">
+                        <form th:action="@{'/index/deleteComment/' + ${comment.postId} + '/' + ${comment.id}}" method="post">
                             <button th:id="'remove-' + ${comment.id}" type="submit" style="display: none">
                                 Удалить
                             </button>

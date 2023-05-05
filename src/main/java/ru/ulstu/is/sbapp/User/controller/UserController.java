@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.ulstu.is.sbapp.Post.model.PostDto;
 import ru.ulstu.is.sbapp.User.model.UserDto;
 import ru.ulstu.is.sbapp.User.service.UserService;
-import ru.ulstu.is.sbapp.WebConfiguration;
+import ru.ulstu.is.sbapp.Configuration.WebConfiguration;
 
 import java.util.List;
 
@@ -42,11 +42,10 @@ public class UserController {
 
     @PutMapping("/{id}")
     public UserDto updateClient(@PathVariable Long id,
-                                  @RequestParam("firstName") String firstName,
-                                  @RequestParam("lastName") String lastname,
+                                  @RequestParam("firstName") String login,
                                   @RequestParam("email") String email,
                                 @RequestParam("password") String password){
-        return new UserDto(userService.updateUser(id, firstName, lastname,email,password));
+        return new UserDto(userService.updateUser(id, login,email,password));
     }
     @PostMapping("/{id}/Post")
     public void addPost(@PathVariable Long id,

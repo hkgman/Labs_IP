@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.ulstu.is.sbapp.Comment.model.CommentDto;
 import ru.ulstu.is.sbapp.Post.model.PostDto;
 import ru.ulstu.is.sbapp.Post.service.PostService;
-import ru.ulstu.is.sbapp.WebConfiguration;
+import ru.ulstu.is.sbapp.Configuration.WebConfiguration;
 
 import java.util.List;
 

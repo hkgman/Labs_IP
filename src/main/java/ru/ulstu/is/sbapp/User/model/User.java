@@ -2,6 +2,7 @@ package ru.ulstu.is.sbapp.User.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import ru.ulstu.is.sbapp.Comment.model.Comment;
 import ru.ulstu.is.sbapp.Post.model.Post;
@@ -16,14 +17,12 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    @Column()
-    @NotBlank(message = "firstName cannot be null")
-    private String firstName;
-    @NotBlank(message = "lastName cannot be null")
-    private String lastName;
+    @NotBlank(message = "Login can't be null or empty")
+    @Size(min = 3, max = 64, message = "Incorrect login length")
+    private String login;
 
-    @Column(nullable = false, unique = true, length = 64)
     @NotBlank(message = "email cannot be null")
+    @Pattern(regexp = "^(.+)@(\\S+)$", message = "Incorrect email value")
     private String email;
 
     @Column(nullable = false, length = 64)
@@ -41,37 +40,26 @@ public class User {
 
     public User() {
     }
-    public User(String firstName,String lastName,String email, String password) {
-        this(firstName,lastName,email, password, UserRole.USER);
+    public User(String login,String email, String password) {
+        this(login,email, password, UserRole.USER);
     }
-    public User(String firstName, String lastName, String email,String password,UserRole role) {
-        this.firstName = firstName;
-        this.lastName = lastName;
+    public User(String login,String email,String password,UserRole role) {
+        this.login=login;
         this.email=email;
         this.password=password;
         this.role=role;
     }
-
+    public User(UserSignupDto userSignupDto) {
+        this.login = userSignupDto.getLogin();
+        this.email = userSignupDto.getEmail();
+        this.password = userSignupDto.getPassword();
+        this.role = UserRole.USER;
+    }
 
     public Long getId() {
         return id;
     }
 
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
     public List<Post> getPosts()
     {
         return  posts;
@@ -112,6 +100,14 @@ public class User {
         return Objects.equals(id, user.id);
     }
 
+    public String getLogin() {
+        return login;
+    }
+
+    public void setLogin(String login) {
+        this.login = login;
+    }
+
     @Override
     public int hashCode() {
         return Objects.hash(id);
@@ -121,8 +117,7 @@ public class User {
     public String toString() {
         return "Client{" +
                 "id=" + id +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
+                ", login='" + login + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
                 ", posts=" + posts +'\''+

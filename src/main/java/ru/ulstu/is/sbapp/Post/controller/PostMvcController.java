@@ -7,6 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import ru.ulstu.is.sbapp.Comment.model.Comment;
 import ru.ulstu.is.sbapp.Comment.model.CommentDto;
 import ru.ulstu.is.sbapp.Comment.service.CommentService;
 import ru.ulstu.is.sbapp.Post.model.PostDto;
@@ -15,10 +16,11 @@ import ru.ulstu.is.sbapp.User.model.UserDto;
 import ru.ulstu.is.sbapp.User.service.UserService;
 
 import java.io.IOException;
+import java.security.Principal;
 import java.util.Base64;
 
 @Controller
-@RequestMapping("/post")
+@RequestMapping("/index")
 public class PostMvcController {
     private final PostService postService;
     private final  UserService userService;
@@ -54,7 +56,7 @@ public class PostMvcController {
                 userService.findAllUsers().stream()
                         .map(UserDto::new)
                         .toList());
-        return "post";
+        return "index";
     }
     @GetMapping("/filter")
     public String getFileteredPosts(@RequestParam(value = "searchValue") String searchValue,Model model)
@@ -67,29 +69,18 @@ public class PostMvcController {
                 userService.findAllUsers().stream()
                         .map(UserDto::new)
                         .toList());
-        return "post";
+        return "index";
     }
-    @GetMapping(value = {"/edit", "/edit/{id}"})
+    @GetMapping(value = {"/edit/{id}"})
     public String editPost(@PathVariable(required = false) Long id,
                            Model model) {
-        if (id == null || id <= 0) {
-            model.addAttribute("postDto", new PostDto());
-            model.addAttribute("users",
-                    userService.findAllUsers().stream()
-                            .map(UserDto::new)
-                            .toList());
-            return "post-create";
-        } else {
             model.addAttribute("postId", id);
             model.addAttribute("postDto", new PostDto(postService.findPost(id)));
             return "post-edit";
-        }
-
     }
 
-    @PostMapping(value = {"/user/", "/{id}"})
+    @PostMapping(value = {"/{id}"})
     public String savePost(@PathVariable(required = false) Long id,
-                           @RequestParam(value = "userId",required = false) Long userId,
                            @RequestParam(value = "multipartFile") MultipartFile multipartFile,
                            @ModelAttribute @Valid PostDto postDto,
                            BindingResult bindingResult,
@@ -98,27 +89,28 @@ public class PostMvcController {
             model.addAttribute("errors", bindingResult.getAllErrors());
             return "post-edit";
         }
-        if (id == null || id <= 0 && userId!=null) {
-            postDto.setImage("data:" + multipartFile.getContentType() + ";base64," + Base64.getEncoder().encodeToString(multipartFile.getBytes()));
-            userService.addNewPost(userId,postDto);
-        } else {
             postDto.setImage("data:" + multipartFile.getContentType() + ";base64," + Base64.getEncoder().encodeToString(multipartFile.getBytes()));
             postService.updatePost(id, postDto);
-        }
-        return "redirect:/post";
+            return "redirect:/user";
     }
 
     @PostMapping("/delete/{postId}")
     public String deletePost(
                              @PathVariable Long postId) {
         postService.deletePost(postId);
-        return "redirect:/post";
+        return "redirect:/user";
     }
     @PostMapping("/deleteComment/{postId}/{commentId}")
     public String deleteComment(@PathVariable Long postId,
-                             @PathVariable Long commentId) {
+                             @PathVariable Long commentId,
+                                Principal principal,Model model) {
+        Comment comment = commentService.findComment(commentId);
+        if(!comment.getUser().getLogin().equals(principal.getName())){
+            model.addAttribute("error", new Exception("Вы не можете удалить не ваш комментарий"));
+            return "error";
+        }
         postService.removeCommentFromPost(postId,commentId);
-        return "redirect:/post/{postId}";
+        return "redirect:/index/{postId}";
     }
 
     @GetMapping("/userPosts")
@@ -132,48 +124,61 @@ public class PostMvcController {
                 userService.findAllUsers().stream()
                         .map(UserDto::new)
                         .toList());
-        return "post";
+        return "index";
     }
 
 
-    @GetMapping(value = {"/addComment/{postId}", "/editComment/{id}"})
-    public String editComment(@PathVariable(required = false) Long id,
-                              @PathVariable(required = false) Long postId,
-                           Model model) {
-        if (id == null || id <= 0) {
-            model.addAttribute("postId", postId);
-            model.addAttribute("users",
-                    userService.findAllUsers().stream()
-                            .map(UserDto::new)
-                            .toList());
-            model.addAttribute("commentDto", new CommentDto());
-            return "comment-create.html";
-        } else {
-            model.addAttribute("id", id);
-            model.addAttribute("commentDto", new CommentDto(commentService.findComment(id)));
+    @GetMapping("/addComment/{postId}")
+    public String showCreateCommentInfo(@PathVariable(value = "postId") Long postId, Model model) {
+        model.addAttribute("postId", postId);
+        model.addAttribute("commentDto", new CommentDto());
+        return "comment-create.html";
+    }
+    @PostMapping("/createComment/{postId}")
+    public String createPost(@PathVariable(value = "postId") Long postId,
+                             @ModelAttribute @Valid CommentDto commentDto,
+                             BindingResult bindingResult,
+                             Principal principal,
+                             Model model) throws IOException
+    {
+        Long userId = userService.findByLogin(principal.getName()).getId();
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("errors", bindingResult.getAllErrors());
+            return "post-create";
+        }
+        postService.addCommentToPost(postId,userId,commentDto.getText());
+        return "redirect:/index";
+    }
+
+    @GetMapping("/editComment/{Id}")
+    public String showEditCommentInfo(@PathVariable(value = "Id") Long Id, Model model,Principal principal) throws Exception {
+        model.addAttribute("Id", Id);
+        CommentDto commentDto = new CommentDto(commentService.findComment(Id));
+        model.addAttribute("commentDto",commentDto);
+        if(!commentDto.getUser().equals(principal.getName())){
+            model.addAttribute("error", new Exception("Вы не можете изменить не ваш комментарий"));
+            return "error";
+        }
+        else
+        {
             return "comment-edit";
         }
 
     }
-    @PostMapping(value = {"/comment/{postId}/user", "/comment/{id}"})
-    public String saveComment(@PathVariable(required = false) Long id,
-                           @RequestParam(value = "userId",required = false) Long userId,
-                          @PathVariable(required = false) Long postId,
-                           @ModelAttribute @Valid CommentDto commentDto,
-                           BindingResult bindingResult,
-                           Model model,
-                            HttpServletRequest request) {
+
+    @PostMapping("/updateComment/{Id}")
+    public String updateComment(@PathVariable(value = "Id") Long Id,
+                             @ModelAttribute @Valid CommentDto commentDto,
+                             BindingResult bindingResult,
+                             Principal principal,
+                             Model model) throws IOException
+    {
+        Long userId = userService.findByLogin(principal.getName()).getId();
         if (bindingResult.hasErrors()) {
             model.addAttribute("errors", bindingResult.getAllErrors());
             return "comment-edit";
         }
-        if (id == null || id <= 0 && userId!=null) {
-            postService.addCommentToPost(postId,userId,commentDto.getText());
-            return "redirect:/post/"+ postId;
-        } else {
-            commentService.updateComment(id, commentDto.getText());
-            return "redirect:/post";
-        }
-
+        commentService.updateComment(Id,commentDto.getText());
+        return "redirect:/user";
     }
 }

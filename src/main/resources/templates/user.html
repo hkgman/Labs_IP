@@ -1,57 +1,108 @@
 <!DOCTYPE html>
-<html lang="en"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{default}" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{default}"
+      xmlns:th="http://www.w3.org/1999/xhtml">
+
 <head>
 </head>
+
 <body>
 <div layout:fragment="content">
-    <div>
-        <a class="btn btn-outline-light text-center mx-2 my-2"
-           th:href="@{/user/edit}">
-            <i class="fa-solid fa-plus"></i>
+    <div class="border-bottom pb-3 mb-3 mx-2">
+        <a class="btn btn-primary" href="/logout">
+            Log Out
         </a>
     </div>
-    <div class="table-responsive">
-        <table class="table">
-            <thead>
-            <tr>
-                <th scope="col">#</th>
-                <th scope="col">ID</th>
-                <th scope="col">Имя</th>
-                <th scope="col">Почта</th>
-                <th scope="col">Пароль</th>
-                <th scope="col"></th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="user, iterator: ${users}">
-                <th scope="row" th:text="${iterator.index} + 1"/>
-                <td th:text="${user.id}"/>
-                <td th:text="${user.firstName} + ' ' + ${user.lastName}" style="width: 60%"/>
-                <td th:text="${user.email}" style="width: 60%"/>
-                <td th:text="${user.password}" style="width: 60%"/>
-                <td style="width: 10%">
-                    <div class="btn-group" role="group" aria-label="Basic example">
-                        <a class="btn btn-outline-light text-center mx-2"
-                           th:href="@{/user/edit/{id}(id=${user.id})}">
+    <h4>Данные профиля</h4>
+    <div th:if="${errors}" th:text="${errors}" class="margin-bottom alert alert-danger"></div>
+    <form action="/user" th:object="${userDto}" method="post">
+        <input th:field="${userDto.id}" type="number" style="display: none;" />
+        <div class="mb-3">
+            <label for="login" class="form-label">Логин</label>
+            <input id="login" th:field="${userDto.login}" class="form-control"
+                   required type="text" />
+        </div>
+        <div class="mb-3">
+            <label for="email" class="form-label">Почта</label>
+            <input id="email" th:field="${userDto.email}" class="form-control"
+                   required type="text" />
+        </div>
+        <div class="mb-3">
+            <label for="password" class="form-label">Пароль (введите для подтверждения изменения данных)</label>
+            <input id="password" th:field="${userDto.password}" class="form-control"
+                   required type="password" />
+        </div>
+        <div class="mb-3">
+            <button type="submit" class="btn btn-success">
+                Изменить
+            </button>
+        </div>
+    </form>
+    <div>
+        <a class="btn btn-outline-primary text-center mx-2"
+           th:href="@{/user/post}">
+            <!--Сам понимаешь что здесь надо сделать-->
+            +
+        </a>
+    </div>
+    <div class="my-5">
+        <!--здесь тоже надо сделать нормальный вывод-->
+        <div class="container-fluid">
+            <div th:each="post, iterator: ${posts}" class="card border-dark mb-3 d-flex flex-row text-black justify-content-between">
+                <div>
+                    <img class="col" style="width:300px;height:200px" th:src="${post.image}"/>
+                </div>
+                <div class="d-flex flex-grow-1 flex-column">
+                    <div class="flex-grow-1 mx-2">
+                        <h th:text="${post.heading}"></h>
+                    </div>
+                    <div class="flex-grow-1 mx-2">
+                        <p th:text="${post.content}"></p>
+                    </div>
+                    <div class="flex-grow-1 mx-2">
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Пользователь</th>
+                                <th scope="col">Текст</th>
+                                <th scope="col"></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="comment, iterator: ${post.comments}">
+                                <th scope="row" th:text="${iterator.index} + 1"/>
+                                <td th:text="${comment.user}" style="width: 60%"/>
+                                <td th:text="${comment.text}" style="width: 60%"/>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="d-flex flex-row justify-content-end ">
+                        <a class="btn btn-outline-primary text-center mx-2"
+                           th:href="@{/index/edit/{id}(id=${post.id})}">
                             <i class="fa fa-pencil" aria-hidden="true"></i> Изменить
                         </a>
-                        <button type="button" class="btn btn-outline-light text-center mx-2"
-                                th:attr="onclick=|confirm('Удалить запись?') && document.getElementById('remove-${user.id}').click()|">
+                        <button type="button" class="btn btn-outline-primary text-center mx-2"
+                                th:attr="onclick=|confirm('Удалить запись?') && document.getElementById('remove-${post.id}').click()|">
                             <i class="fa fa-trash" aria-hidden="true"></i> Удалить
                         </button>
+                        <form th:action="@{'/index/delete/' + ${post.id}}" method="post">
+                            <button th:id="'remove-' + ${post.id}" type="submit" style="display: none">
+                                Удалить
+                            </button>
+                        </form>
+                        <a th:href=@{/index/{id}(id=${post.id})} class='btn btn-outline-primary mx-2'><i class="fa-solid fa-envelopes-bulk"></i></a>
                     </div>
-                    <form th:action="@{/user/delete/{id}(id=${user.id})}" method="post">
-                        <button th:id="'remove-' + ${user.id}" type="submit" style="display: none">
-                            Удалить
-                        </button>
-                    </form>
-                </td>
-            </tr>
-            </tbody>
-        </table>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 </body>
+
+<th:block layout:fragment="scripts">
+    <script type="module">
+    </script>
+</th:block>
+
 </html>

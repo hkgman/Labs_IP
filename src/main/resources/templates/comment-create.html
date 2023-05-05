@@ -8,18 +8,10 @@
 <div  layout:fragment="content">
     <div class="mx-auto my-3">
         <div th:text="${errors}" class="margin-bottom alert-danger"></div>
-        <form action="#" th:action="@{'/post/comment/' + ${postId} + '/user'}" th:object="${commentDto}" method="post">
-            <div class="mb-3 my-2">
-                <label for="selectBox" class="form-label">Пользователь</label>
-                <select th:name="userId" id="selectBox" class="form-select">
-                    <option th:each="value: ${users}" th:selected="${selectBox} == ${value}" th:value="${value.id}">
-                        <span th:text="${value.firstName}"></span>
-                    </option>
-                </select>
-            </div>
+        <form action="#" th:action="@{'/index/createComment/' + ${postId}}" th:object="${commentDto}" method="post">
             <div class="mb-3">
                 <div>
-                    <input class="form-control" id="commentText" th:field="${commentDto.text}" type="text" defaultValue="" required/>
+                     <input class="form-control" id="commentText" th:field="${commentDto.text}" type="text" defaultValue="" required/>
                 </div>
                 <div>
                     <button type="submit" class="btn btn-primary button-fixed">
