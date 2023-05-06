@@ -16,14 +16,13 @@ export default function App() {
           { path: 'news', label: "News", userGroup: "AUTH" },
           { path: 'users', label: "Users", userGroup: "ADMIN" },
           { path: 'account', label: "Account", userGroup: "AUTH" },
-          {path: 'Post',userGroup: "AUTH"},
         ];
       return(
             <>
                 <BrowserRouter>
                     <div className='body_app'>
                       <NavBar links={links}></NavBar>
-                      <div className="d-flex text-white bg-info bg-gradient fw-bold ">
+                      <div className="d-flex flex-column text-white bg-info bg-gradient fw-bold ">
                           <Routes>
                               <Route element={<LoginPage />} path="/login" />
                               <Route element={<SignupPage />} path="/signup" />

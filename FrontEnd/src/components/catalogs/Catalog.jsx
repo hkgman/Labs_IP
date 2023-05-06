@@ -5,16 +5,22 @@ import Modal from "../common/Modal";
 
 export default function Catalog(props) {
     const [items, setItems] = useState([]);
-    const [userId,setUserId] = useState(0);
+    const [userId,setUserId] = useState(-1);
     const [value,setvalue]=useState('');
 
     useEffect(() => {
         loadItems();
     }, []);
-
+    useEffect(() => {
+        console.log("random");
+    }, [items]);
 
     useEffect(()=>
     {
+        if(userId==-1)
+        {
+            return;
+        }
        loadItems1();
     },[userId])
 
@@ -23,6 +29,10 @@ export default function Catalog(props) {
     }
     useEffect(()=>
     {
+        if(value=="")
+        {
+            return;
+        }
         loadItems2();
     },[value])
     const setUserIDd = async function(id)
@@ -39,6 +49,7 @@ export default function Catalog(props) {
         const requestUrl = `http://localhost:8080/api/1.0/post`;
         const response = await fetch(requestUrl,requestParams);
         const posts = await response.json();
+       
         setItems(posts);   
     }
     const loadItems1 = async function() {
@@ -64,7 +75,6 @@ export default function Catalog(props) {
         const requestUrl = `http://localhost:8080/api/1.0/post/filteredposts?Text=${value}`;
         const response = await fetch(requestUrl,requestParams);
         const posts = await response.json();
-        console.log(posts);
         setItems(posts);   
     }
 

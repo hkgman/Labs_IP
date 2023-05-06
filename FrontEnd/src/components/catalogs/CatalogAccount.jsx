@@ -13,9 +13,15 @@ export default function CatalogAccount(props) {
     const [userId,setUserId]=useState(0);
 
     useEffect(() => {
-        loadItems();
         getUserId();
     }, []);
+    useEffect(() => {
+        if(userId==0)
+        {
+            return;
+        }
+        loadItems();
+    }, [userId]);
 
     const getTokenForHeader = function () {
         return "Bearer " + localStorage.getItem("token");
@@ -40,6 +46,7 @@ export default function CatalogAccount(props) {
                 "Authorization": getTokenForHeader(),
             }
         };
+        console.log(userId);
         const requestUrl = `http://localhost:8080/api/1.0/user/${userId}/posts`;
         const response = await fetch(requestUrl,requestParams);
         const posts = await response.json();
