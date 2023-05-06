@@ -2,9 +2,6 @@ import { useState } from 'react';
 import {useEffect} from 'react';
 
 export default function Toolbar(props) {
-    function add() {
-        props.onAdd();
-    }
     const [clients, setClientst] = useState([]);
     const getTokenForHeader = function () {
         return "Bearer " + localStorage.getItem("token");
@@ -41,12 +38,6 @@ export default function Toolbar(props) {
                     ))}
                 </select>
             </div>
-            <div>
-                <button type="button" className="btn btn-primary" onClick={add}>
-                    +
-                </button>
-            </div>
-            
         </div >
     );
 }

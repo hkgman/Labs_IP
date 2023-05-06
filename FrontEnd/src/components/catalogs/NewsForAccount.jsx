@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
-import Catalog from './Catalog';
+import Catalog from './CatalogAccount';
 import New from '../../models/NewDto';
 
-export default function News(props) {
+export default function NewsForAccount(props) {
     const url = '/api/1.0/post/';
     const transformer = (data) => new New(data);
     const catalogStudHeaders = [
@@ -39,7 +39,9 @@ export default function News(props) {
             headers={catalogStudHeaders} 
             url={url}
             transformer={transformer}
-            data={data}>
+            data={data}
+            onAdd={handleOnAdd}
+            onEdit={handleOnEdit}>
             <div className="mb-3 text-black">
                 <label htmlFor="image" className="form-label">Изображение</label>
                 <input type="file" id="image" className="form-control" required onChange={handleOnChange}/>

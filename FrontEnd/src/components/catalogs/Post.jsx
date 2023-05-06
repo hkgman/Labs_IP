@@ -8,7 +8,6 @@ export default function Post(props) {
     useEffect(() => {
         getAll();
     }, []);
-    const [output, setOutput] = useState([]);
     const [userId,setUserId] = useState();
     const commentInput = document.getElementById("commentText");
 
@@ -20,44 +19,62 @@ export default function Post(props) {
         const id=urlParams.get('id');
         getCurrentPost(id).then(curPost => setad(curPost));
         getComments(id)
-
-        const requestUrl = "http://localhost:8080/user";
-        const response = await fetch(requestUrl);
-        const users = await response.json();
-        setOutput(users);
+        getUserId();
     }
 
 
 
     const refresh = async function(id,text)
-        {
-            const requestParams={
-              method:"PUT",
-              headers:{
-                "Content-Type":"application/json",
-              }  
-            };
-            const response=await fetch(`http://localhost:8080/comment/${id}?Text=${text}`,requestParams);
-            return await response.json();
-        }
+    {
+        const requestParams={
+        method:"PUT",
+        headers:{
+            "Content-Type":"application/json",
+            "Authorization": getTokenForHeader(),
+        }  
+        };
+        const response=await fetch(`http://localhost:8080/api/1.0/comment/${id}?Text=${text}`,requestParams);
+        return await response.json();
+    }
 
-
+    const getTokenForHeader = function () {
+        return "Bearer " + localStorage.getItem("token");
+    }
 
     const create = async function (text, id) {
         const requestParams = {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
+                "Authorization": getTokenForHeader(),
             }
         };
-        const response = await fetch(`http://localhost:8080/post/${ad.id}/Comment/${id}?Text=${text}`,requestParams);
+        const response = await fetch(`http://localhost:8080/api/1.0/post/${ad.id}/Comment/${id}?Text=${text}`,requestParams);
     }
 
-
+    const getUserId = async function () {
+        const requestParams = {
+            method: "GET",
+            headers: {
+                "Authorization": getTokenForHeader(),
+            }
+        };
+        let login = localStorage.getItem("user");
+        const requestUrl = "http://localhost:8080/api/1.0" + `/userId?login=${login}`;
+        const response = await fetch(requestUrl, requestParams);
+        const user = await response.json();
+        setUserId(user);
+    }
 
     const getCurrentPost = async function (id) {
-        const requestUrl = "http://localhost:8080/post/"+id;
-        const response = await fetch(requestUrl);
+        const requestParams = {
+            method: "GET",
+            headers: {
+                "Authorization": getTokenForHeader(),
+            }
+        };
+        const requestUrl = "http://localhost:8080/api/1.0/post/"+id;
+        const response = await fetch(requestUrl,requestParams);
         const product = await response.json();
         return product;
     }
@@ -69,25 +86,27 @@ export default function Post(props) {
             method: "DELETE",
             headers:{
                 "Content-Type":"application/json",
+                "Authorization": getTokenForHeader(),
             }
         };
-        const requestUrl = `http://localhost:8080/post/${ad.id}/Comment/${id}`;
+        const requestUrl = `http://localhost:8080/api/1.0/post/${ad.id}/Comment/${id}`;
         const response=await fetch(requestUrl,requestParams);
         return await response.json;      
     };
 
 
-    function getuser(){
-        var selectBox = document.getElementById("selectBox");
-        var selectedValue = selectBox.options[selectBox.selectedIndex].value;
-        setUserId(selectedValue);
-   }
 
 
     const getComments = async function(id)
     {
-        const requesturl = "http://localhost:8080/post/"+id+"/comments"
-        const response = await fetch(requesturl);
+        const requestParams = {
+            method: "GET",
+            headers: {
+                "Authorization": getTokenForHeader(),
+            }
+        };
+        const requesturl = "http://localhost:8080/api/1.0/post/"+id+"/comments"
+        const response = await fetch(requesturl,requestParams);
         const comments = await response.json();
         setComments(comments);
     }
@@ -133,13 +152,6 @@ export default function Post(props) {
                 </div>
             </div>
             <div className="d-flex mx-2">
-                <select id="selectBox"  onChange={getuser}>
-                    <option  disabled value="">Выбор...</option>
-                    {
-                        output.map((client) => (
-                                <option className='text-black' key={client.id} value={client.id}>{client.firstName}</option>
-                    ))}
-                </select>
                 <input className="form-control" id="commentText" type="text" defaultValue="" required/>
                 <button type="button" className="btn btn-primary" onClick={(e)=>add_but(e)}>
                     +

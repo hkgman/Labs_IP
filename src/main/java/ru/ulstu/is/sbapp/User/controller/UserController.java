@@ -75,6 +75,12 @@ public class UserController {
         return new UserDto(user);
     }
 
+    @GetMapping(OpenAPI30Configuration.API_PREFIX + "/userId")
+    public Long getUserId(@RequestParam("login") String login) {
+        User user = userService.findByLogin(login);
+        return user.getId();
+    }
+
     @PostMapping(OpenAPI30Configuration.API_PREFIX + "/user")
     public String updateUser(@RequestBody @Valid UserDto userDto) {
         try {
@@ -84,12 +90,12 @@ public class UserController {
             return e.getMessage();
         }
     }
-    @PostMapping("/user/{id}/Post")
+    @PostMapping(OpenAPI30Configuration.API_PREFIX+"/user/{id}/Post")
     public void addPost(@PathVariable Long id,
                         @RequestBody @Valid PostDto postDto) {
         userService.addNewPost(id, postDto);
     }
-    @DeleteMapping("/user/{id}/Post/{postId}")
+    @DeleteMapping(OpenAPI30Configuration.API_PREFIX+"/user/{id}/Post/{postId}")
     public void removePost(@PathVariable Long id,
                            @PathVariable Long postId)
     {

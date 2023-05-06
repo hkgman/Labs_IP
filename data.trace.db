@@ -184,3 +184,12 @@ Wrong user name or password [28000-210]
 	at org.h2.message.DbException.getJdbcSQLException(DbException.java:529)
 	at org.h2.message.DbException.getJdbcSQLException(DbException.java:496)
 	... 50 more
+2023-05-06 13:42:52 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLDataException: Значение слишком длинное для поля "BINARY VARYING": "646174613a696d6167652f6a7065673b6261736536342c2f396a2f34414151536b5a4a5267414241... (1164871)"
+Value too long for column "BINARY VARYING": "646174613a696d6167652f6a7065673b6261736536342c2f396a2f34414151536b5a4a5267414241... (1164871)" [22001-210]
+2023-05-06 13:48:55 jdbc[7]: exception
+org.h2.jdbc.JdbcSQLDataException: Значение слишком длинное для поля "BINARY VARYING": "646174613a696d6167652f6a7065673b6261736536342c2f396a2f34624b6e525868705a67414153... (7951727)"
+Value too long for column "BINARY VARYING": "646174613a696d6167652f6a7065673b6261736536342c2f396a2f34624b6e525868705a67414153... (7951727)" [22001-210]
+2023-05-06 13:49:23 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLDataException: Значение слишком длинное для поля "BINARY VARYING": "646174613a696d6167652f6a7065673b6261736536342c2f396a2f34534175525868705a67414154... (3767039)"
+Value too long for column "BINARY VARYING": "646174613a696d6167652f6a7065673b6261736536342c2f396a2f34534175525868705a67414154... (3767039)" [22001-210]

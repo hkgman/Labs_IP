@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 const hostURL = "http://localhost:8080";
 const host = hostURL + "/api/1.0";
 
-const UsersPage = function () {
+const Users = function () {
 
     const [users, setUsers] = useState([]);
     const [pageNumbers, setPageNumbers] = useState([]);
@@ -49,7 +49,7 @@ const UsersPage = function () {
     }
 
     const removeButtonOnClick = function (id) {
-        const confirmResult = confirm("Are you sure you want to remove " +
+        const confirmResult = confirm("Are you sure you want to remove " + 
             "the selected user?");
         if (confirmResult === false) {
             return;
@@ -59,7 +59,7 @@ const UsersPage = function () {
 
     return (
         <>
-            <div className="table-shell mb-3">
+            <div className="table-shell mx-3">
                 <table className="table">
                     <thead>
                     <tr>
@@ -109,4 +109,4 @@ const UsersPage = function () {
     );
 }
 
-export default UsersPage;
+export default Users;

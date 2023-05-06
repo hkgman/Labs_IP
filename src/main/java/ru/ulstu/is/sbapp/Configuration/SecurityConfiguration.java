@@ -86,6 +86,6 @@ public class SecurityConfiguration {
                 .requestMatchers("/webjars/**")
                 .requestMatchers("/swagger-resources/**")
                 .requestMatchers("/v3/api-docs/**")
-                .requestMatchers("/h2-console");
+                .requestMatchers("/h2-console/**");
     }
 }
