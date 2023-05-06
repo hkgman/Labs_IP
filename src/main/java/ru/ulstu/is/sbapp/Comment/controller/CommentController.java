@@ -2,11 +2,12 @@ package ru.ulstu.is.sbapp.Comment.controller;
 
 import org.springframework.web.bind.annotation.*;
 import ru.ulstu.is.sbapp.Comment.service.CommentService;
+import ru.ulstu.is.sbapp.Configuration.OpenAPI30Configuration;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/comment")
+@RequestMapping(OpenAPI30Configuration.API_PREFIX +  "/comment")
 public class CommentController {
     private final CommentService commentService;
     public CommentController(CommentService commentService) {

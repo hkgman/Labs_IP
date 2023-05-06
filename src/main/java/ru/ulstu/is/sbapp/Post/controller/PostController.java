@@ -3,6 +3,7 @@ package ru.ulstu.is.sbapp.Post.controller;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 import ru.ulstu.is.sbapp.Comment.controller.CommentDto;
+import ru.ulstu.is.sbapp.Configuration.OpenAPI30Configuration;
 import ru.ulstu.is.sbapp.Post.model.Post;
 import ru.ulstu.is.sbapp.Post.service.PostService;
 import ru.ulstu.is.sbapp.User.controller.UserDto;
@@ -11,7 +12,7 @@ import ru.ulstu.is.sbapp.User.service.UserService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/post")
+@RequestMapping(OpenAPI30Configuration.API_PREFIX + "/post")
 public class PostController {
     private final PostService postService;
     public PostController(PostService postService) {

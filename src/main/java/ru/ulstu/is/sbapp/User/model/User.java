@@ -2,8 +2,12 @@ package ru.ulstu.is.sbapp.User.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import ru.ulstu.is.sbapp.Comment.model.Comment;
 import ru.ulstu.is.sbapp.Post.model.Post;
+import ru.ulstu.is.sbapp.User.controller.UserDto;
+import ru.ulstu.is.sbapp.User.controller.UserSignupDto;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,14 +19,20 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    @Column()
-    @NotBlank(message = "firstName cannot be null")
-    private String firstName;
-    @NotBlank(message = "lastName cannot be null")
-    private String lastName;
 
-    @NotBlank(message = "email cannot be null")
+    @NotBlank(message = "Login can't be null or empty")
+    @Size(min = 3, max = 64, message = "Incorrect login length")
+    private String login;
+
+    @NotBlank(message = "Email can't be null or empty")
+    @Pattern(regexp = "^(.+)@(\\S+)$", message = "Incorrect email value")
     private String email;
+
+    @NotBlank(message = "Password can't be null or empty")
+    @Size(min = 3, max = 64, message = "Incorrect password length")
+    private String password;
+
+    private UserRole role;
 
     @OneToMany(mappedBy ="user",cascade = {CascadeType.MERGE,CascadeType.REMOVE},fetch = FetchType.EAGER)
     private List<Post> posts =new ArrayList<>();
@@ -33,10 +43,25 @@ public class User {
     public User() {
     }
 
-    public User(String firstName, String lastName, String email) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email=email;
+    public User(String login, String email, String password, UserRole role) {
+        this.login = login;
+        this.email = email;
+        this.password = password;
+        this.role = role;
+    }
+
+    public User(UserDto userDto) {
+        this.login = userDto.getLogin();
+        this.email = userDto.getEmail();
+        this.password = userDto.getPassword();
+        this.role = userDto.getRole();
+    }
+
+    public User(UserSignupDto userSignupDto) {
+        this.login = userSignupDto.getLogin();
+        this.email = userSignupDto.getEmail();
+        this.password = userSignupDto.getPassword();
+        this.role = UserRole.USER;
     }
 
 
@@ -44,20 +69,20 @@ public class User {
         return id;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public String getLogin() {
+        return login;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    public void setLogin(String login) {
+        this.login = login;
     }
 
-    public String getLastName() {
-        return lastName;
+    public String getPassword() {
+        return password;
     }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setPassword(String password) {
+        this.password = password;
     }
     public List<Post> getPosts()
     {
@@ -70,6 +95,13 @@ public class User {
     public void addNewPost(Post post) {
         posts.add(post);
         post.setUser(this);
+    }
+    public UserRole getRole() {
+        return role;
+    }
+
+    public void setRole(UserRole role) {
+        this.role = role;
     }
 
     public String getEmail()
@@ -97,8 +129,8 @@ public class User {
     public String toString() {
         return "Client{" +
                 "id=" + id +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
+                ", login='" + login + '\'' +
+                ", password='" + password + '\'' +
                 ", email='" + email + '\'' +
                 ", posts=" + posts +'\''+
                 '}';

@@ -1,48 +1,45 @@
-
-import { useRoutes, Outlet, BrowserRouter } from 'react-router-dom';
-import Header from './components/common/Header';
-import Catalogs from './components/catalogs/MainPage';
-import CatalogGroups from './components/catalogs/Autorize';
+import { Routes, BrowserRouter, Route } from 'react-router-dom';
+import PrivateRoutes from "./components/common/PrivateRoutes";
+import MainPage from './components/catalogs/MainPage';
+import UsersPage from './components/catalogs/Users';
 import CatalogStudents from './components/catalogs/News';
 import Post from './components/catalogs/Post';
-import Reports from './components/catalogs/RezhimRaboty';
-import ReportGroupStudents from './components/catalogs/Raspisanie';
 import Footer from './components/common/Footer';
-
-function Router(props) {
-  return useRoutes(props.rootRoute);
-}
+import LoginPage from "./components/catalogs/LoginPage";
+import SignupPage from "./components/catalogs/SignupPage";
+import NavBar from "./components/common/NavBar";
 
 export default function App() {
-  const routes = [
-    { index: true, element: <Catalogs /> },
-    { path: 'Main_page', element: <Catalogs />, label: 'Главная' },
-    { path: 'News', element: <CatalogStudents/>, label:'Новости' },
-    { path: 'Autorize', element: <CatalogGroups />, label:'Авторизация'},
-    { path: 'RezhimRaboty', element: <Reports />, label: 'Режим работы' },
-    { path: 'Raspisanie', element: <ReportGroupStudents />,label:'Расписание' },
-    { path: 'Post', element: <Post/>}
-  ];
-  const links = routes.filter(route => route.hasOwnProperty('label'));
-  const rootRoute = [
-    { path: '/', element: render(links), children: routes }
-  ];
+      const links = [
+          { path: 'main', label: "Main", userGroup: "AUTH" },
+          { path: 'news', label: "News", userGroup: "AUTH" },
+          { path: 'users', label: "Users", userGroup: "ADMIN" },
+        ];
+      return(
+            <>
+                <BrowserRouter>
+                    <div className='body_app'>
+                      <NavBar links={links}></NavBar>
+                      <div className="d-flex text-white bg-info bg-gradient fw-bold ">
+                          <Routes>
+                              <Route element={<LoginPage />} path="/login" />
+                              <Route element={<SignupPage />} path="/signup" />
+                              <Route element={<PrivateRoutes userGroup="AUTH" />}>
+                                  <Route element={<CatalogStudents />} path="/news" />
+                                  <Route element={<MainPage />} path="/main" exact />
+                                  <Route element={<MainPage />} path="*" />
+                              </Route>
+                              <Route element={<PrivateRoutes userGroup="ADMIN" />}>
+                                  <Route element={<UsersPage />} path="/users" />
+                              </Route>
+                          </Routes>
+                      </div>
+                      <Footer className="border-top">
+                          Footer
+                      </Footer  >
+                  </div>
+              </BrowserRouter>
+          </>
+      );
 
-  function render(links) {
-    return (
-      <div className='body_app'>
-        <Header links={links} />
-        <div className="d-flex text-white bg-info bg-gradient fw-bold">
-          <Outlet />
-        </div>
-        <Footer links={links}/>
-      </div>
-    );
-  }
-
-  return (
-    <BrowserRouter>
-      <Router rootRoute={ rootRoute } />
-    </BrowserRouter>
-  );
 }
