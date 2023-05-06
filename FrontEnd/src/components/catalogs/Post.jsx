@@ -142,6 +142,7 @@ export default function Post(props) {
                 commentInput.value = "";
             });
     }
+    //Комменты удаляются в любом случае (не важно какой пользователь его написал (надо фиксить))
     return(
         <div>
             <div className="da d-flex my-2">
