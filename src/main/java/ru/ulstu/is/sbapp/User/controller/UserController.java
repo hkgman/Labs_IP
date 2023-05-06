@@ -47,7 +47,13 @@ public class UserController {
                 .toList();
         return new Pair<>(users, pageNumbers);
     }
-    @GetMapping("/{id}/posts")
+    @GetMapping(OpenAPI30Configuration.API_PREFIX + "/userList")
+    public List<UserDto> getListUsers() {
+        return userService.findAllUsers().stream()
+                .map(UserDto::new)
+                .toList();
+    }
+    @GetMapping(OpenAPI30Configuration.API_PREFIX +"/user/{id}/posts")
     public List<PostDto> getPosts(@PathVariable Long id) {
         return userService.GetUserPosts(id).stream()
                 .map(PostDto::new)

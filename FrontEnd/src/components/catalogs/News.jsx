@@ -3,7 +3,7 @@ import Catalog from './Catalog';
 import New from '../../models/NewDto';
 
 export default function News(props) {
-    const url = 'post/';
+    const url = '/api/1.0/post/';
     const transformer = (data) => new New(data);
     const catalogStudHeaders = [
         { name: 'image', label: 'Картинка' },

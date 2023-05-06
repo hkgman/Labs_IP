@@ -20,7 +20,9 @@ export default function Catalog(props) {
        loadItems();
     },[userId])
 
-
+    const getTokenForHeader = function () {
+        return "Bearer " + localStorage.getItem("token");
+    }
     useEffect(()=>
     {
         loadItems2();
@@ -30,15 +32,27 @@ export default function Catalog(props) {
         setUserId(id);
     }
     const loadItems = async function() {
-        const requestUrl = `http://localhost:8080/user/${userId}/posts`;
-        const response = await fetch(requestUrl);
+        const requestParams = {
+            method: "GET",
+            headers: {
+                "Authorization": getTokenForHeader(),
+            }
+        };
+        const requestUrl = `http://localhost:8080/api/1.0/user/${userId}/posts`;
+        const response = await fetch(requestUrl,requestParams);
         const posts = await response.json();
         setItems(posts);   
     }
 
     const loadItems2 = async function() {
-        const requestUrl = `http://localhost:8080/post/filteredposts?Text=${value}`;
-        const response = await fetch(requestUrl);
+        const requestParams = {
+            method: "GET",
+            headers: {
+                "Authorization": getTokenForHeader(),
+            }
+        };
+        const requestUrl = `http://localhost:8080/api/1.0/post/filteredposts?Text=${value}`;
+        const response = await fetch(requestUrl,requestParams);
         const posts = await response.json();
         console.log(posts);
         setItems(posts);   
@@ -46,7 +60,7 @@ export default function Catalog(props) {
 
     const saveItem = async function() {
         if (!isEdit) {
-            const requestUrl = `http://localhost:8080/user/${userId}/Post`;
+            const requestUrl = `http://localhost:8080/api/1.0/user/${userId}/Post`;
             const temppost=JSON.stringify(props.data)
             const requestParams = {
                 method: "POST",
@@ -58,7 +72,7 @@ export default function Catalog(props) {
             await fetch(requestUrl,requestParams).then(() => loadItems());
 
         } else {
-            const requestUrl = "http://localhost:8080/post/"+props.data.id;
+            const requestUrl = "http://localhost:8080/api/1.0/post/"+props.data.id;
             const temppost=JSON.stringify(props.data)
             const requestParams = {
                 method: "PUT",
@@ -81,7 +95,7 @@ export default function Catalog(props) {
     
 
     const edit = async function(editedId) {
-        const requestUrl = "http://localhost:8080/post/"+editedId;
+        const requestUrl = "http://localhost:8080/api/1.0/post/"+editedId;
         const requestParams = {
             mode: 'cors'
         }
@@ -100,7 +114,7 @@ export default function Catalog(props) {
 
     const handleRemove = async function(id) {
             if (confirm('Удалить выбранные элементы?')) {
-                const requestUrl = `http://localhost:8080/user/${userId}/Post/`+id;
+                const requestUrl = `http://localhost:8080/api/1.0/user/${userId}/Post/`+id;
                 const requestParams = {
                     method: "DELETE",
                      headers: {

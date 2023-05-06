@@ -6,7 +6,23 @@ export default function Card(props) {
     function edit(id) {
         props.onEdit(id);
     }
+    const getTokenForHeader = function () {
+        return "Bearer " + localStorage.getItem("token");
+    }
 
+    const getUser = async function () {
+        const requestParams = {
+            method: "GET",
+            headers: {
+                "Authorization": getTokenForHeader(),
+            }
+        };
+        let login = localStorage.getItem("user");
+        const requestUrl = host + `/user?login=${login}`;
+        const response = await fetch(requestUrl, requestParams);
+        const user = await response.json();
+        return user;
+    }
     function remove(id) {
         props.onRemove(id);
     }
@@ -14,12 +30,18 @@ export default function Card(props) {
         getAll();
     }, []);
     
-    const [clients, setClientst] = useState([]);
+    const [clients, setClients] = useState([]);
     const getAll = async function () {
-        const requestUrl = "http://localhost:8080/user";
-        const response = await fetch(requestUrl);
+        const requestParams = {
+            method: "GET",
+            headers: {
+                "Authorization": getTokenForHeader(),
+            }
+        };
+        const requestUrl = "http://localhost:8080/api/1.0/userList";
+        const response = await fetch(requestUrl,requestParams);
         const users = await response.json();
-        setClientst(users);
+        setClients(users);
     }
     const [modalTable, setModalTable] = useState(false);
     const [currEditItem, setCurrEditItem] = useState(0);
@@ -33,7 +55,7 @@ export default function Card(props) {
     const handleSubmitEdit = async (e, id) => {
         console.info('Start synchronize edit');
         e.preventDefault(); // страница перестает перезагружаться
-        const requestUrl = `http://localhost:8080/post/${id}/Comment/${props.userId}?Text=${text}`;
+        const requestUrl = `http://localhost:8080/api/1.0/post/${id}/Comment/${props.userId}?Text=${text}`;
             const requestParams = {
                 method: "POST",
                 headers: {

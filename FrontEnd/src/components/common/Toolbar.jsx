@@ -6,16 +6,25 @@ export default function Toolbar(props) {
         props.onAdd();
     }
     const [clients, setClientst] = useState([]);
-    
+    const getTokenForHeader = function () {
+        return "Bearer " + localStorage.getItem("token");
+    }
     useEffect(() => {
         getAll();
     }, []);
     const getAll = async function () {
-        const requestUrl = "http://localhost:8080/user";
-        const response = await fetch(requestUrl);
+        const requestParams = {
+            method: "GET",
+            headers: {
+                "Authorization": getTokenForHeader(),
+            }
+        };
+        const requestUrl = "http://localhost:8080/api/1.0/userList";
+        const response = await fetch(requestUrl,requestParams);
         const users = await response.json();
         setClientst(users);
     }
+    
     function getuser(){
          var selectBox = document.getElementById("selectBox");
          var selectedValue = selectBox.options[selectBox.selectedIndex].value;
@@ -28,7 +37,7 @@ export default function Toolbar(props) {
                     <option  disabled value="">Выбор...</option>
                     {
                         clients.map((client) => (
-                                <option className='text-black' key={client.id} value={client.id}>{client.firstName}</option>
+                                <option className='text-black' key={client.id} value={client.id}>{client.login}</option>
                     ))}
                 </select>
             </div>
