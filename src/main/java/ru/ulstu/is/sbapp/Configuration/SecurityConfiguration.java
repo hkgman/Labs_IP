@@ -54,16 +54,9 @@ public class SecurityConfiguration {
                 .loginPage(LOGIN_URL).permitAll()
                 .and()
                 .logout().permitAll();
-        return http.build();
+        return http.userDetailsService(userService).build();
     }
 
-    @Bean
-    public AuthenticationManager authenticationManagerBean(HttpSecurity http) throws Exception {
-        AuthenticationManagerBuilder authenticationManagerBuilder = http
-                .getSharedObject(AuthenticationManagerBuilder.class);
-        authenticationManagerBuilder.userDetailsService(userService);
-        return authenticationManagerBuilder.build();
-    }
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
