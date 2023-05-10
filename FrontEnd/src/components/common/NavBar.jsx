@@ -1,16 +1,46 @@
 import { useState, useEffect } from "react";
-import { Link } from 'react-router-dom';
+import { useNavigate,Link } from 'react-router-dom';
 
 const NavBar = function (props) {
 
     const [userRole, setUserRole] = useState("NONE");
 
+    const navigate = useNavigate();
+
     useEffect(() => {
         window.addEventListener("storage", () => {
+            let token = localStorage.getItem("token");
+            if (token) {
+                getRole(token).then((role) => {
+                    if (localStorage.getItem("role") != role) {
+                        localStorage.removeItem("token");
+                        localStorage.removeItem("user");
+                        localStorage.removeItem("role");
+                        window.dispatchEvent(new Event("storage"));
+                        navigate("/login");
+                    }
+                });
+            }
             getUserRole();
         });
         getUserRole();
     }, [])
+
+    const getRole = async function (token) {
+        const requestParams = {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        };
+        const requestUrl = `http://localhost:8080/who_am_i?token=${token}`;
+        const response = await fetch(requestUrl, requestParams);
+        const result = await response.text();
+        return result;
+    }
+
+
+    
 
     const getUserRole = function () {
         const role = localStorage.getItem("role") || "NONE";
