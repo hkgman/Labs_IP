@@ -10,6 +10,7 @@ import ru.ulstu.is.sbapp.User.controller.UserDto;
 import ru.ulstu.is.sbapp.User.service.UserService;
 
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @RequestMapping(OpenAPI30Configuration.API_PREFIX + "/post")
@@ -50,11 +51,17 @@ public class PostController {
                            @RequestParam("Text") String Text) {
         postService.addCommentToPost(id, userId,Text);
     }
-    @DeleteMapping("/{id}/Comment/{commentId}")
+    @DeleteMapping("/{id}/Comment/{commentId}/curUser/{userId}/commentUser/{userComId}")
     public void removeComment(@PathVariable Long id,
-                              @PathVariable Long commentId)
+                              @PathVariable Long commentId,
+                              @PathVariable Long userId,
+                              @PathVariable Long userComId)
     {
-        postService.removeCommentFromPost(id,commentId);
+        if(Objects.equals(userComId, userId))
+        {
+            postService.removeCommentFromPost(id,commentId);
+        }
+
     }
 
 

@@ -24,7 +24,7 @@ export default function Post(props) {
 
 
 
-    const refresh = async function(id,text)
+    const refresh = async function(id,user,text)
     {
         const requestParams={
         method:"PUT",
@@ -33,7 +33,7 @@ export default function Post(props) {
             "Authorization": getTokenForHeader(),
         }  
         };
-        const response=await fetch(`http://localhost:8080/api/1.0/comment/${id}?Text=${text}`,requestParams);
+        const response=await fetch(`http://localhost:8080/api/1.0/comment/${id}/curUser/${userId}/commentUser/${user}?Text=${text}`,requestParams);
         return await response.json();
     }
 
@@ -81,7 +81,7 @@ export default function Post(props) {
 
 
 
-    const remove = async function(id){
+    const remove = async function(id,user){
         const requestParams = {
             method: "DELETE",
             headers:{
@@ -89,7 +89,7 @@ export default function Post(props) {
                 "Authorization": getTokenForHeader(),
             }
         };
-        const requestUrl = `http://localhost:8080/api/1.0/post/${ad.id}/Comment/${id}`;
+        const requestUrl = `http://localhost:8080/api/1.0/post/${ad.id}/Comment/${id}/curUser/${userId}/commentUser/${user}`;
         const response=await fetch(requestUrl,requestParams);
         return await response.json;      
     };
@@ -114,9 +114,9 @@ export default function Post(props) {
     const [comments,setComments] = useState([]);
 
 
-    const rem_but = function(id,event)
+    const rem_but = function(id,user,event)
     {
-        remove(id).then((result)=>{
+        remove(id,user).then((result)=>{
             getAll();
         });
     }
@@ -129,15 +129,14 @@ export default function Post(props) {
             create(commentInput.value, userId).then((result) => {
                 getAll();
                 commentInput.value = "";
-                alert(`Comment[id=${result.id}, text=${result.firstName}]`);
             });
     }
 
 
-    const edit_btn = function(id,event)
+    const edit_btn = function(id,user,event)
     {
         console.log("Обновление")
-            refresh(id, commentInput.value).then((result)=>{
+            refresh(id,user, commentInput.value).then((result)=>{
                 getAll();
                 commentInput.value = "";
             });
