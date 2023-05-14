@@ -113,7 +113,7 @@ const Account = function () {
     return (
         <>
             <div className="border-bottom pb-3 mb-3">
-                <button class="btn btn-primary"
+                <button className="btn btn-primary"
                         onClick={logoutButtonOnClick}>
                     Log Out
                 </button>
