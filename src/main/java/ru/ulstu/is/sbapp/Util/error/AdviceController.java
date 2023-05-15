@@ -12,7 +12,7 @@ import ru.ulstu.is.sbapp.User.service.UserNotFoundException;
 import ru.ulstu.is.sbapp.Util.validation.ValidationException;
 import java.util.stream.Collectors;
 
-@ControllerAdvice
+/*@ControllerAdvice*/
 public class AdviceController {
     @ExceptionHandler({
             CommentNotFoundException.class,

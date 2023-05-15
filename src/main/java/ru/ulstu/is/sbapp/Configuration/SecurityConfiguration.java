@@ -54,6 +54,7 @@ public class SecurityConfiguration {
                 .loginPage(LOGIN_URL).permitAll()
                 .and()
                 .logout().permitAll();
+        http.formLogin().defaultSuccessUrl("/index",true);
         return http.userDetailsService(userService).build();
     }
 
@@ -64,6 +65,8 @@ public class SecurityConfiguration {
                 .requestMatchers("/css/**")
                 .requestMatchers("/js/**")
                 .requestMatchers("/templates/**")
-                .requestMatchers("/webjars/**");
+                .requestMatchers("/webjars/**")
+                .requestMatchers("/img/Emblema.png");
     }
+
 }
